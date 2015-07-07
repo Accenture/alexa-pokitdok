@@ -1,0 +1,40 @@
+{
+  "name": "alexa-pokitdok",
+  "version": "1.0.0",
+  "description": "Integration of Alexa with Pokitdok",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "author": "Michael W. Klein",
+  "license": "ISC",
+  "keywords": [
+    "digital",
+    "health",
+    "alexa",
+    "echo",
+    "pokitdok"
+  ],
+  "dependencies": {
+    "config": "^1.14.0",
+    "node-usps": "0.0.2",
+    "pokitdok-nodejs": "0.0.7"
+  },
+  "bundledDependencies": [
+    "pokitdok-nodejs",
+    "node-usps",
+    "config"
+  ],
+  "devDependencies": {
+    "grunt": "0.4.*",
+    "grunt-aws-lambda": "0.4.*",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-copy": "0.*",
+    "grunt-contrib-jshint": "0.*",
+    "grunt-pack": "0.1.*",
+    "jshint-stylish": "1.*",
+    "load-grunt-tasks": "3.*",
+    "npm": "2.*",
+    "time-grunt": "*"
+  }
+}

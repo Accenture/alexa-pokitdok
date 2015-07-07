@@ -1,0 +1,12 @@
+// Example configuration for the application. Rename this file 
+// from default.example.json to default.json in order to make active.
+{
+  // PokitDok module configs
+  "pokitdok": {
+    "api": {
+      "clientId": "",				//Your PokitDok API client ID here
+      "clientSecret": "",		//Your PokitDok API client secret here
+      "apiVersion": "v4"
+    }
+  }
+}

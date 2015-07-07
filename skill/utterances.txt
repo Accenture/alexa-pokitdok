@@ -1,0 +1,19 @@
+HelpIntent hello
+HelpIntent for help
+HelpIntent help
+AvailablePlans find available plans in {texas|state}
+AvailablePlans what plans are available plans in {texas|state}
+AvailablePlans find available {PPO|planType} plans in {texas|state}
+AvailablePlans what plans are available {PPO|planType} plans in {texas|state}
+AvailablePlans find available health plans in {texas|state}
+AvailablePlans what health plans are available plans in {texas|state}
+AvailablePlans find available {PPO|planType} health plans in {texas|state}
+AvailablePlans what plans are available {PPO|planType} health plans in {texas|state}
+AvailablePlans find available {HMO|planType} plans in {texas|state}
+AvailablePlans what plans are available {HMO|planType} plans in {texas|state}
+AvailablePlans find available {HMO|planType} health plans in {texas|state}
+AvailablePlans what plans are available {HMO|planType} health plans in {texas|state}
+AvailablePlans find available {EPO|planType} plans in {texas|state}
+AvailablePlans what plans are available {EPO|planType} plans in {texas|state}
+AvailablePlans find available {EPO|planType} health plans in {texas|state}
+AvailablePlans what plans are available {EPO|planType} health plans in {texas|state}

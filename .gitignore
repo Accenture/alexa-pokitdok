@@ -1,0 +1,5 @@
+config/default.json
+config/dev.json
+dist/
+node_modules/
+event.json
