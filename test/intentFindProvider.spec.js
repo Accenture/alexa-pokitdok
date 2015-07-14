@@ -67,7 +67,7 @@ describe('Find Providers', function() {
 		it('should invoke the lamba function', function(done){
 
 			//Set async test timeout - Needs enough time for Pokitdoc and geocoder to return a response
-			this.timeout(7000);
+			this.timeout(10000);
 
 			// This is the async callback that will be called upon success
 			var success = function (result) {
@@ -77,10 +77,6 @@ describe('Find Providers', function() {
 
 						it('shoud return output speech text', function () {
 							result.response.outputSpeech.should.have.property('text').to.have.length.of.at.least(10);
-						});
-
-						it('should say back the name given in the request', function() {
-							result.response.outputSpeech.text.should.contain(eventData.request.intent.slots.name.value);
 						});
 
 						it('should have output speech type of \'PlainText\'', function () {

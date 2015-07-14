@@ -67,7 +67,7 @@ describe('Find Available Plans', function() {
 						});
 
 						it('should not say no plans could be found', function() {
-							result.response.outputSpeech.text.should.not.contain('I could not find');
+							result.response.outputSpeech.text.should.not.contain('could not find');
 						});
 
 						it('shoud return reprompt output speech text', function () {

@@ -122,7 +122,7 @@ module.exports = function (grunt) {
       },
       all: {
         options: {
-          force: true
+          force: false
         },
         src: [
           'index.js',

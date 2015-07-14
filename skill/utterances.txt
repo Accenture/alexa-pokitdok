@@ -1,6 +1,6 @@
-HelpIntent hello
-HelpIntent for help
-HelpIntent help
+HelpMe hello
+HelpMe for help
+HelpMe help
 MyName my name is {michael|name}
 MyAddress my address is {123 main street|street}
 AvailablePlans find available plans in {texas|state}

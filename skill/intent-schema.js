@@ -73,7 +73,7 @@
       ]
     },
     {
-      "intent": "HelpIntent",
+      "intent": "HelpMe",
       "slots": []
     }
   ]
