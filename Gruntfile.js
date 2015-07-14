@@ -89,31 +89,6 @@ module.exports = function (grunt) {
     },
 
 
-    copy: {
-    	//Copy the start session event data to the event.json file for testing
-      startSessionEvent: {
-        files: [{
-          src: ['test/events/startSession.json'],
-          dest: 'event.json'
-        }]
-      },
-      //Copy the intent request event data to the event.json file for testing
-      sendIntentEvent: {
-        files: [{
-          src: ['test/events/sendIntent.json'],
-          dest: 'event.json'
-        }]
-      },
-      //Copy the end session event data to the event.json file for testing
-      endSessionEvent: {
-        files: [{
-          src: ['test/events/endSession.json'],
-          dest: 'event.json'
-        }]
-      },
-    },
-
-
 	  // Make sure code styles are up to par and there are no obvious mistakes
     jshint: {
       options: {
