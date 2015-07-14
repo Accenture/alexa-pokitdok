@@ -3,8 +3,9 @@
 var config = require('config');
 var pkdApiConfig = config.get('pokitdok.api');
 var gcApiConfig = config.get('google-geocoder.api');
+var responses = config.get('responses.regions.' + config.get('global').region);
 
-if(pkdApiConfig && gcApiConfig) {
+if(pkdApiConfig && gcApiConfig && responses) {
     console.log('Successfully loaded environment variables!');
 }
 else {
@@ -24,6 +25,11 @@ var extra = {
     formatter: null         
 };
 var geocoder = require('node-geocoder')('google', 'https', extra);
+
+//Include Node utility package to support string formatting
+var util = require('util');
+
+
 
 /**
  * This sample demonstrates a simple skill built with the Amazon Alexa Skills Kit.
@@ -144,13 +150,14 @@ function onSessionEnded(sessionEndedRequest, session) {
 function getWelcomeResponse(callback) {
     // If we wanted to initialize the session to have some attributes we could add those here.
     var sessionAttributes = {};
-    var cardTitle = 'Welcome to the Alexa Pokitdok demo';
-    var speechOutput = 'Welcome to the Alexa Pokitdok demo, '
-                + 'We can meet all your health needs by just listening to your voice. '
-                + 'Let\'s start by getting to know you, what is your name?';
+
+    //Setup the default responses
+    var cardTitle = responses.SessionStart.cardTitle;
+    var speechOutput = responses.SessionStart.speechOutput;
+
     // If the user either does not reply to the welcome message or says something that is not
     // understood, they will be prompted again with this text.
-    var repromptText = 'I\'m sorry, I missed that. What is your name?';
+    var repromptText = responses.SessionStart.repromptText;
     var shouldEndSession = false;
 
     callback(sessionAttributes,
@@ -158,14 +165,14 @@ function getWelcomeResponse(callback) {
 }
 
 function setMyName(intent, session, callback) {
-    var cardTitle = intent.name;
+    var cardTitle = responses[intent.name].cardTitle;
     var shouldEndSession = false;
 
     var nameSlot = intent.slots.name;
     var name = nameSlot.value;
 
-    var speechOutput = 'Nice to meet you ' + name + '! What is your address?';
-    var repromptText = 'I\'m sorry, I missed that. What is your address?';
+    var speechOutput = util.format(responses[intent.name].speechOutput, name);
+    var repromptText = util.format(responses[intent.name].repromptText, name);
 
     var sessionAttributes = setSessionValue(session, 'username', name);
 
@@ -185,7 +192,7 @@ function getSessionValue(session, lablel) {
 }
 
 function getFindProvider(intent, session, callback) {
-    var cardTitle = intent.name;
+    var cardTitle = responses[intent.name].cardTitle;
     var stateSlot = intent.slots.state;
     var addressSlot = intent.slots.address;
     var citySlot = intent.slots.city;
@@ -222,7 +229,7 @@ function getFindProvider(intent, session, callback) {
 * Gets a list of plans available in the current state and plan type
 */
 function getAvaiablePlans(intent, session, callback) {
-    var cardTitle = intent.name;
+    var cardTitle = responses[intent.name].cardTitle;
     var stateSlot = intent.slots.state;
     var planTypeSlot = intent.slots.planType;
     var repromptText = '';
@@ -251,24 +258,23 @@ function getAvaiablePlans(intent, session, callback) {
     pokitdok.plans(planParams, function (err, res) {
         if (err) {
             //An error occurred, ask the user to try again.
-            speechOutput = 'I could not find any plans for your location, please try again';
-            repromptText = 'I could not find any plans for your location, you can ask me to '
-                    + 'find available plans by saying, find PPO plans for Texas';
+            speechOutput = responses[intent.name].errorResponse.speechOutput;
+            repromptText = responses[intent.name].errorResponse.repromptText;;
             console.log(err, res.statusCode);
         }
         else {
-            //It worked! Read back all the plans found
-            speechOutput = "We found the following plans in your state, ";
-            repromptText = 'You can ask me to find available plans by saying, find PPO plans for Texas';
+            var planStr = '';
 
             // print the plan names and ids to the console
             for (var i = 0, ilen = res.data.length; i < ilen; i++) {
                 var plan = res.data[i];
                 console.log(plan.plan_name);
-                speechOutput = speechOutput + plan.plan_name + ', ';
+                planStr = planStr + plan.plan_name + ', ';
             }
 
-            speechOutput = speechOutput + 'you can ask me to find additional plans by saying, find PPO plans for Texas';
+            // It worked! Read back all the plans found
+            speechOutput = util.format(responses[intent.name].speechOutput, planStr);
+            repromptText = util.format(responses[intent.name].repromptText, planStr);
         }
 
         callback(sessionAttributes,

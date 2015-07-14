@@ -9,7 +9,7 @@ module.exports = function (grunt) {
 
 	grunt.initConfig({
 
-		//Text application locally in Amazon AWS Lambda environment
+    //Test application locally in Amazon AWS Lambda environment
     lambda_invoke: {
       default: {
         options: {
@@ -20,7 +20,7 @@ module.exports = function (grunt) {
       }
     },
 
-		//Package for deployment to Amazon AWS Lambda
+    //Package for deployment to Amazon AWS Lambda
     lambda_package: {
       default: {
         options: {

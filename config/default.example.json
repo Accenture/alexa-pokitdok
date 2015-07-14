@@ -1,17 +1,65 @@
 // Example configuration for the application. Rename this file 
 // from default.example.json to default.json in order to make active.
 {
+  // Global configuration settings
+  "global": {
+    "region": "English-US"
+  },
   // PokitDok module configs
   "pokitdok": {
     "api": {
-      "clientId": "",				//Your PokitDok API client ID here
-      "clientSecret": "",		//Your PokitDok API client secret here
+      "clientId": "",
+      "clientSecret": "",
       "apiVersion": "v4"
     }
   },
-  "google-geocoder" : {
-  	"api": {
-  		"key": ""							//Your Google geocoder API key here
-  	}
+  // node-geocoder module configs
+  "google-geocoder": {
+    "api": {
+      "key": ""
+    }
+  },
+  // Configuration of Alexa spoken responses
+  "responses": {
+    "regions": {
+      "English-US": {
+        "SessionStart": {
+          "cardTitle": "Welcome to the Alexa Pokitdok demo",
+          "speechOutput": "Welcome to the Alexa Pokitdok demo, we can meet all your health needs by just listening to your voice. Let's start by getting to know you, what is your name?",
+          "repromptText": "I'm sorry, I missed that. What is your name?",
+          "errorResponse": {
+            "speechOutput": "Welcome to the Alexa Pokitdok demo, we can meet all your health needs by just listening to your voice. Let's start by getting to know you, what is your name?",
+            "repromptText": "I'm sorry, I missed that. What is your name?"
+          }
+        },
+        "AvailablePlans": {
+          "cardTitle": "Available Plans",
+          "speechOutput": "We found the following plans in your state, %s, you can ask me to find additional plans by saying, find PPO plans for Texas",
+          "repromptText": "I could not find any plans for your location, you can ask me to find available plans by saying, find PPO plans for Texas",
+          "errorResponse": {
+            "speechOutput": "I could not find any plans for your location, please try again",
+            "repromptText": "I could not find any plans for your location, you can ask me to find available plans by saying, find PPO plans for Texas"
+          }
+        },
+        "MyName": {
+          "cardTitle": "Your Name",
+          "speechOutput": "Nice to meet you %s! What is your address?",
+          "repromptText": "I'm sorry, I missed that. What is your address?",
+          "errorResponse": {
+            "speechOutput": "Nice to meet you %s! What is your address?",
+            "repromptText": "I'm sorry, I missed that. What is your address?"
+          }
+        },
+        "FindProvider": {
+          "cardTitle": "Find a Doctor",
+          "speechOutput": "",
+          "repromptText": "",
+          "errorResponse": {
+            "speechOutput": "",
+            "repromptText": ""
+          }
+        }
+      }
+    }
   }
 }
