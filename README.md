@@ -31,13 +31,13 @@ Node
 ----------
 You will need to install the dependency packages by executing the following in the root of the repository
 
-		npm install
+		$ npm install
 
 Grunt
 ----------
 You will need to install Grunt on your system if you have not already done so for previous projects
 
-		npm install grunt -g
+		$ npm install grunt -g
 
 Amazon Credentials
 -------------------
@@ -45,9 +45,9 @@ In order to deploy the application to Amazon's Lambda service, you will need to 
 
 Create the directory and file to store your credentials...
 
-		mkdir ~/.aws
-		cd ~/.aws
-		touch credentials
+		$ mkdir ~/.aws
+		$ cd ~/.aws
+		$ touch credentials
 
 Add the following to the 'credentials' file you created in the previous step
 
@@ -55,14 +55,14 @@ Add the following to the 'credentials' file you created in the previous step
 		aws_access_key_id = <YOUR_ACCESS_KEY_ID>
 		aws_secret_access_key = <YOUR_SECRET_ACCESS_KEY>
 
-PokitDok Credentials
+External API Credentials
 --------------------
-In order to communicate with PokitDok's API you will need a client ID and a client secret. To populate your own keys, use the following steps:
+In order to communicate with PokitDok's and Google Geolocation API you will need API Keys. To populate your own keys, use the following steps:
 
-		cd config/
-		cp default.example.json default.json
+		$ cd config/
+		$ cp default.example.json default.json
 
-Edit the default.json file in your favorite text edited and populate the clientId and clientSecret parameters.
+Edit the default.json file in your favorite text edited and populate the API keys.
 
 	  "pokitdok": {
 	    "api": {
@@ -70,29 +70,29 @@ Edit the default.json file in your favorite text edited and populate the clientI
 	      "clientSecret": "",		//Your PokitDok API client secret here
 	      "apiVersion": "v4"
 	    }
+	  },
+	  "google-geocoder" : {
+	  	"api": {
+	  		"key": ""							//Your Google geocoder API key here
+	  	}
 	  }
 
 Test the Application Locally
 ----------------------------
-Using the [grunt-aws-lambda](https://www.npmjs.com/package/grunt-aws-lambda) package, you can test Lambda functions on your local machine. The Gruntfile.js for this application has already been setup to copy events from the 'events' folder to be passed into the local invocation of your Lambda function. 
+You can test the application using the [mocha](http://mochajs.org/) testing framework with the [Chai](chaijs.com/) assertion framework. To test an individual Alexa intent you can do this directly using the mocha framework by using the following steps:
 
-To execute a full session test, execute the following...
+Ensure the mocha framework is installed globally on your machine...
 
-		grunt test
+		$ npm install mocha -g
 
-To just start your Alexa session...
+Execute the specific Alexa intent you would like to run...
 
-		grunt start
+		$ mocha test/startSession.spec.js
 
-To just send an Alexa intent request...
+If you would like to test all the application behaviors, the test suite can be executed from grunt using the following...
 
-		grunt request
+		$ grunt test
 
-To just send an Alexa end session request...
-
-		grunt end
-
-If you would like to change what is passed to your Lambda function, you can do so by changing the contents of test/events/. 
 
 Deploy the Application to AWS Lambda
 ------------------------------------
@@ -118,9 +118,9 @@ After the function is created in AWS, you need to update your Gruntfile.js with 
       }
     },
 
-Now that you have the function created in AWS, and your local environment knows where to deploy the code to, you can deploy your package directly to AWs. This is a simple grunt task...
+Now that you have the function created in AWS, and your local environment knows where to deploy the code to, you can deploy your package directly to AWS. This is a simple grunt task...
 
-		grunt deploy
+		$ grunt deploy
 
 Create Alexa Skill and Point it to Lambda
 -----------------------------------------

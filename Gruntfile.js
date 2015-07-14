@@ -31,6 +31,38 @@ module.exports = function (grunt) {
       }
     },
 
+    // Tell grunt which files to watch for changes
+    watch: {
+      options: {
+        spawn: false,
+      },
+      gruntfile: {
+          files: 'Gruntfile.js',
+          tasks: ['jshint:gruntfile']
+      },
+      src: {
+          files: ['index.js', 'scripts/*.js'],
+          tasks: ['test']
+      },
+      test: {
+          files: '<%= jshint.test.src %>',
+          tasks: ['test']
+      }
+    },
+
+    // Define test configuration
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec',
+          clearRequireCache: true,
+          quiet: false
+        },
+        src: ['test/*.spec.js']
+      },
+    },
+
+
     //Deploy to Amazon AWS Lambda
     /*  Specify your AWS creditionals in ~/aws/credentials in the following format:
     		[default]
@@ -53,7 +85,7 @@ module.exports = function (grunt) {
 
     clean: {
       //Delete extra directories included in the Pokitdok package that are unnecessary and cause deployment errors
-      pokitdok: ["node_modules/pokitdok-nodejs/.idea", "node_modules/pokitdok-nodejs/venv"]
+      pokitdok: ['node_modules/pokitdok-nodejs/.idea', 'node_modules/pokitdok-nodejs/venv']
     },
 
 
@@ -89,12 +121,21 @@ module.exports = function (grunt) {
         reporter: require('jshint-stylish')
       },
       all: {
+        options: {
+          force: true
+        },
         src: [
-          'Gruntfile.js',
           'index.js',
+          'Gruntfile.js',
           'scripts/{,*/}*.js',
-        	'test/{,*/}*.js'
+          'test/specs/{,*/}*.js'
         ]
+      },
+      gruntfile: {
+        src: 'Gruntfile.js'
+      },
+      test: {
+        src: 'test/{,*/}*.js'
       }
     }
 
@@ -103,32 +144,13 @@ module.exports = function (grunt) {
   //Register grunt tasks
   //---------------------
 
-	grunt.registerTask('start', [
-		//'jshint',
-		'copy:startSessionEvent',
-		'lambda_invoke'
-	]);
-
-	grunt.registerTask('request', [
-		//'jshint',
-		'copy:sendIntentEvent',
-		'lambda_invoke'
-	]);
-
-	grunt.registerTask('end', [
-		//'jshint',
-		'copy:endSessionEvent',
-		'lambda_invoke'
-	]);
-
   grunt.registerTask('test', [
-    'start',
-    'request',
-    'end'
+    'jshint:all',
+    'mochaTest'
   ]);
 
 	grunt.registerTask('build', [
-    //'jshint',
+    'jshint:all',
     'clean:pokitdok',
 		'lambda_package'
 	]);
@@ -139,7 +161,8 @@ module.exports = function (grunt) {
 	]);
 
 	grunt.registerTask('default', [
-    'test'
+    'test',
+    'watch'
   ]);
 
 };

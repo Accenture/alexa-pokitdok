@@ -8,5 +8,10 @@
       "clientSecret": "",		//Your PokitDok API client secret here
       "apiVersion": "v4"
     }
+  },
+  "google-geocoder" : {
+  	"api": {
+  		"key": ""							//Your Google geocoder API key here
+  	}
   }
 }

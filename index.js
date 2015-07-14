@@ -1,22 +1,29 @@
 'use strict';
 
-
 var config = require('config');
-var apiConfig = config.get('pokitdok.api');
+var pkdApiConfig = config.get('pokitdok.api');
+var gcApiConfig = config.get('google-geocoder.api');
 
-if(apiConfig) {
-    console.log('Successfully loaded environment variables!')
+if(pkdApiConfig && gcApiConfig) {
+    console.log('Successfully loaded environment variables!');
 }
 else {
-    console.log('Failed to load environment variables!')
+    console.log('Failed to load environment variables!');
 }
 
 // get a connection to the PokitDok Platform for the most recent version
 var PokitDok = require('pokitdok-nodejs');
-var pokitdok = new PokitDok(apiConfig.clientId, apiConfig.clientSecret, apiConfig.apiVersion);
+var pokitdok = new PokitDok(pkdApiConfig.clientId, pkdApiConfig.clientSecret, pkdApiConfig.apiVersion);
 
 //Include library for working with addresses
 var usps = require('node-usps');
+
+//Include library for working with geolocation
+var extra = {
+    apiKey: gcApiConfig.key,
+    formatter: null         
+};
+var geocoder = require('node-geocoder')('google', 'https', extra);
 
 /**
  * This sample demonstrates a simple skill built with the Amazon Alexa Skills Kit.
@@ -40,6 +47,7 @@ exports.handler = function (event, context) {
              context.fail('Invalid Application ID');
          }
         */
+        console.log(context.succeed);
 
         if (event.session.new) {
             onSessionStarted({requestId: event.request.requestId}, event.session);
@@ -106,6 +114,10 @@ function onIntent(intentRequest, session, callback) {
     // Dispatch to your skill's intent handlers
     if ('AvailablePlans' === intentName) {
         getAvaiablePlans(intent, session, callback);
+    } else if ('MyName' === intentName) {
+        setMyName(intent, session, callback);
+    } else if ('FindProvider' === intentName) {
+        getFindProvider(intent, session, callback);
     } else if ('HelpIntent' === intentName) {
         getWelcomeResponse(callback);
     } else {
@@ -122,7 +134,7 @@ function onSessionEnded(sessionEndedRequest, session) {
     //            + ', sessionId=' + session.sessionId);
 
     console.log('onSessionEnded requestId=' + sessionEndedRequest.requestId
-            + ', sessio=' + JSON.stringify(session));
+            + ', session=' + JSON.stringify(session));
     // Add cleanup logic here
 }
 
@@ -134,16 +146,76 @@ function getWelcomeResponse(callback) {
     var sessionAttributes = {};
     var cardTitle = 'Welcome to the Alexa Pokitdok demo';
     var speechOutput = 'Welcome to the Alexa Pokitdok demo, '
-                + 'We can meet all your health needs by just listening to your voice, '
-                + 'Try us by saying, find available health plans in Texas';
+                + 'We can meet all your health needs by just listening to your voice. '
+                + 'Let\'s start by getting to know you, what is your name?';
     // If the user either does not reply to the welcome message or says something that is not
     // understood, they will be prompted again with this text.
-    var repromptText = 'Please ask me to find available health plans in Texas by saying, '
-                + 'find available health plans in Texas';
+    var repromptText = 'I\'m sorry, I missed that. What is your name?';
     var shouldEndSession = false;
 
     callback(sessionAttributes,
              buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+}
+
+function setMyName(intent, session, callback) {
+    var cardTitle = intent.name;
+    var shouldEndSession = false;
+
+    var nameSlot = intent.slots.name;
+    var name = nameSlot.value;
+
+    var speechOutput = 'Nice to meet you ' + name + '! What is your address?';
+    var repromptText = 'I\'m sorry, I missed that. What is your address?';
+
+    var sessionAttributes = setSessionValue(session, 'username', name);
+
+    callback(sessionAttributes,
+        buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+}
+
+function setSessionValue(session, label, value) {
+    var sessionAttributes = session.attributes;
+    sessionAttributes[label] = value;
+    return sessionAttributes;
+}
+
+function getSessionValue(session, lablel) {
+    var sessionAttributes = session.attributes;
+    return sessionAttributes[label];
+}
+
+function getFindProvider(intent, session, callback) {
+    var cardTitle = intent.name;
+    var stateSlot = intent.slots.state;
+    var addressSlot = intent.slots.address;
+    var citySlot = intent.slots.city;
+    var radiusSlot = intent.slots.radius;
+    var specialtySlot = intent.slots.specialty;
+    var zipcodeSlot = intent.slots.zipcode;
+    var repromptText = '';
+    var sessionAttributes = session.attributes;
+    var shouldEndSession = false;
+    var speechOutput = '';
+
+    var address = addressSlot.value;
+    var state = stateSlot.value;
+    var city = citySlot.value;
+    var radius = radiusSlot.value || '5';    //Default to 5mi radius
+    var specialty = specialtySlot.value;
+    var zipcode = zipcodeSlot.value;
+
+    var reqData = {
+        address: address,
+        city: city,
+        state: state,
+        zipcode: zipcode,
+        country: 'United States'
+    };
+    console.log('reqData=' + JSON.stringify(reqData));
+
+    geocoder.geocode(reqData, function(err, res) {
+        console.log('geocoded response=' + JSON.stringify(res));
+    });
 }
 
 /***
@@ -154,11 +226,11 @@ function getAvaiablePlans(intent, session, callback) {
     var stateSlot = intent.slots.state;
     var planTypeSlot = intent.slots.planType;
     var repromptText = '';
-    var sessionAttributes = {};
+    var sessionAttributes = session.attributes;
     var shouldEndSession = false;
-    var speechOutput = '';
+    var speechOutput = ''; 
 
-    //Default the plan type to PPO if on is not specified
+    //Default planType to 'PPO' if not specified
     var planType = planTypeSlot.value || 'PPO';
 
     //Convert name of state to abbreviation
@@ -169,11 +241,14 @@ function getAvaiablePlans(intent, session, callback) {
     state = address.State;
 
     //Log our input parameters
-    console.log('Input planType=' + JSON.stringify(planType));
-    console.log('Input state=' + JSON.stringify(state));
+    var planParams = {
+        plan_type: planType,
+        state: state
+    };
+    console.log('Input planParams=' + JSON.stringify(planParams));
 
-    // fetch plan information for PPOs in Texas
-    pokitdok.plans({plan_type:planType, state: state}, function (err, res) {
+    // fetch plan information based on planType and state inputs
+    pokitdok.plans(planParams, function (err, res) {
         if (err) {
             //An error occurred, ask the user to try again.
             speechOutput = 'I could not find any plans for your location, please try again';
@@ -182,14 +257,14 @@ function getAvaiablePlans(intent, session, callback) {
             console.log(err, res.statusCode);
         }
         else {
-            //It worked! Read back all theh plans found
+            //It worked! Read back all the plans found
             speechOutput = "We found the following plans in your state, ";
             repromptText = 'You can ask me to find available plans by saying, find PPO plans for Texas';
 
             // print the plan names and ids to the console
             for (var i = 0, ilen = res.data.length; i < ilen; i++) {
                 var plan = res.data[i];
-                console.log(plan.plan_name + ':' + plan.plan_id);
+                console.log(plan.plan_name);
                 speechOutput = speechOutput + plan.plan_name + ', ';
             }
 
@@ -224,7 +299,7 @@ function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
             }
         },
         shouldEndSession: shouldEndSession
-    }
+    };
 
     console.log('Response=' + JSON.stringify(response));
     return response;
@@ -235,5 +310,5 @@ function buildResponse(sessionAttributes, speechletResponse) {
         version: '1.0',
         sessionAttributes: sessionAttributes,
         response: speechletResponse
-    }
+    };
 }

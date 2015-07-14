@@ -1,6 +1,8 @@
 HelpIntent hello
 HelpIntent for help
 HelpIntent help
+MyName my name is {michael|name}
+MyAddress my address is {123 main street|street}
 AvailablePlans find available plans in {texas|state}
 AvailablePlans what plans are available plans in {texas|state}
 AvailablePlans find available {PPO|planType} plans in {texas|state}

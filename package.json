@@ -6,6 +6,14 @@
   "scripts": {
     "test": "grunt test"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://innersource.accenture.com/accenture-digital-health/alexa-pokitdok.git"
+  },
+  "homepage": "https://innersource.accenture.com/accenture-digital-health/alexa-pokitdok.git",
+  "engines": {
+    "node": ">=0.10.0"
+  },
   "author": "Michael W. Klein",
   "license": "ISC",
   "keywords": [
@@ -17,23 +25,29 @@
   ],
   "dependencies": {
     "config": "^1.14.0",
+    "node-geocoder": "^2.21.2",
     "node-usps": "0.0.2",
     "pokitdok-nodejs": "0.0.7"
   },
   "bundledDependencies": [
     "pokitdok-nodejs",
     "node-usps",
-    "config"
+    "config",
+    "node-geocoder"
   ],
   "devDependencies": {
+    "chai": "3.*",
     "grunt": "0.4.*",
     "grunt-aws-lambda": "0.4.*",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-copy": "0.*",
     "grunt-contrib-jshint": "0.*",
+    "grunt-contrib-watch": "0.6.*",
+    "grunt-mocha-test": "0.12.*",
     "grunt-pack": "0.1.*",
     "jshint-stylish": "1.*",
     "load-grunt-tasks": "3.*",
+    "mocha": "2.*",
     "npm": "2.*",
     "time-grunt": "*"
   }
