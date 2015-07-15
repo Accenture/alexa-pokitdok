@@ -6,10 +6,13 @@ var cfg = require('config');
 var logger = require('winston');
 /* jshint ignore:end */
 
-//logger.add(winston.transports.File, { filename: "../logs/production.log" });
+// Get the log configuration from our app configuration file ('./config/NODE_ENV.json')
 var logConfig = cfg.get('logging');
 
+// Remove the default console logger
 logger.remove(logger.transports.Console);
+
+// Add a console logger if it is enabled
 if(logConfig.console.enabled) {
 	var consoleOptions = {
 		level: logConfig.console.logLevel,
@@ -21,10 +24,11 @@ if(logConfig.console.enabled) {
 		humanReadableUnhandledException:  logConfig.console.humanReadableUnhandledException,
 		showLevel: logConfig.console.showLevel
 	};
-	console.log(consoleOptions);
+
 	logger.add(logger.transports.Console, consoleOptions);
 }
 
+// Add a file logger if it is enabled
 if(logConfig.file.enabled) {
 	var fileOptions = {
 		filename: logConfig.file.filename,
@@ -40,18 +44,8 @@ if(logConfig.file.enabled) {
     tailable: logConfig.file.tailable,
     showLevel: logConfig.file.showLevel
 	};
-	console.log(fileOptions);
+
 	logger.add(logger.transports.File, fileOptions);
 }
 
-/*var consoleOptions = {};
-logger.level = logConfig.console.logLevel;
-logger.colorize = logConfig.colorize;
-logger.json = logConfig.json;
-logger.stringify = logConfig.stringify;
-logger.prettyPrint = logConfig.prettyPrint;
-logger.depth = logConfig.depth;
-logger.humanReadableUnhandledException = logConfig.humanReadableUnhandledException;
-logger.showLevel = logConfig.showLevel;
-*/
 module.exports=logger;
