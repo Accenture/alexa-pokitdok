@@ -26,7 +26,11 @@
       "intent": "MyAddress",
       "slots": [
         {
-          "name": "address",
+          "name": "streetNumber",
+          "type": "NUMBER"
+        },
+        {
+          "name": "streetName",
           "type": "LITERAL"
         },
         {
@@ -39,29 +43,13 @@
         },
         {
           "name": "zipcode",
-          "type": "LITERAL"
-        }        
+          "type": "NUMBER"
+        }
       ]
     },
     {
       "intent": "FindProvider",
       "slots": [
-        {
-          "name": "address",
-          "type": "LITERAL"
-        },
-        {
-          "name": "city",
-          "type": "LITERAL"
-        },
-        {
-          "name": "state",
-          "type": "LITERAL"
-        },
-        {
-          "name": "zipcode",
-          "type": "LITERAL"
-        },
         {
           "name": "radius",
           "type": "NUMBER"
@@ -69,11 +57,27 @@
         {
           "name": "specialty",
           "type": "LITERAL"
+        },
+        {
+          "name": "firstName",
+          "type": "LITERAL"
+        },
+        {
+          "name": "lastName",
+          "type": "LITERAL"
+        },
+        {
+          "name": "organizationName",
+          "type": "LITERAL"
         }
       ]
     },
     {
       "intent": "HelpMe",
+      "slots": []
+    },
+    {
+      "intent": "Cancel",
       "slots": []
     }
   ]
