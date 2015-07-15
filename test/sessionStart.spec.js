@@ -1,5 +1,9 @@
 'use strict';
 
+/* jshint ignore:start */
+var logger = require('winston');
+/* jshint ignore:end */
+
 // Setup test libraries
 var chai = require('chai');
 var should = require('chai').should();

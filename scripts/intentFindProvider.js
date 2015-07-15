@@ -1,17 +1,14 @@
 'use strict';
 
+/* jshint ignore:start */
+var logger = require('winston');
+/* jshint ignore:end */
+
 // Load configuration
 var cfg = require('config');
 var pkdApiConfig = cfg.get('pokitdok.api');
-var gcApiConfig = cfg.get('google-geocoder.api');
 var responses = cfg.get('responses.regions.' + cfg.get('global').region);
 
-//Include library for working with geolocation
-var extra = {
-    apiKey: gcApiConfig.key,
-    formatter: null         
-};
-var geocoder = require('node-geocoder')('google', 'https', extra);
 
 // get a connection to the PokitDok Platform for the most recent version
 var PokitDok = require('pokitdok-nodejs');
@@ -23,82 +20,87 @@ var helpers = require('./helpers.js');
 //Include Node utility package to support string formatting
 var util = require('util');
 
+// Safely access slot values that may not have been passed in from Alexa
+function getSlotValue(intent, slotName) {
+  var rtnVal;
+
+  if(typeof intent.slots[slotName] !== 'undefined' && intent.slots[slotName]){
+    rtnVal = intent.slots[slotName].value;
+  }
+
+  return rtnVal;
+}
+
 exports.executeIntent = function (intent, session, callback) {
   var cardTitle = responses[intent.name].cardTitle;
-  var stateSlot = intent.slots.state;
-  var addressSlot = intent.slots.address;
-  var citySlot = intent.slots.city;
-  var radiusSlot = intent.slots.radius;
-  var specialtySlot = intent.slots.specialty;
-  var zipcodeSlot = intent.slots.zipcode;
   var repromptText = '';
   var sessionAttributes = session.attributes;
   var shouldEndSession = false;
   var speechOutput = '';
 
-  var address = addressSlot.value;
-  var state = stateSlot.value;
-  var city = citySlot.value;
-  var radius = radiusSlot.value || '5';    //Default to 5mi radius
-  var specialty = specialtySlot.value;
-  var zipcode = zipcodeSlot.value;
+  var state = helpers.getSessionValue(session, 'state');
+  var city = helpers.getSessionValue(session, 'city');
+  var zipcode = helpers.getSessionValue(session, 'zipcode');
+  var radius = getSlotValue(intent, 'radius') || '5';    //Default to 5mi radius
+  var specialty = getSlotValue(intent, 'specialty');
+  var firstName = getSlotValue(intent, 'firstName');
+  var lastName = getSlotValue(intent, 'lastName');
+  var organizationName = getSlotValue(intent, 'organizationName');
 
-  var reqData = {
-      address: address,
-      city: city,
-      state: state,
-      zipcode: zipcode,
-      country: 'United States'
+  if(helpers.promptToCollectData(session, cardTitle, 'Ok, let me find you a doctor, first', callback)) {
+      return;
+  }
+
+  // Log our input parameters
+  var provParams = {
+    city: city,
+    state: state,
+    first_name: firstName,
+    last_name: lastName,
+    specialty: specialty,
+    organization_name: organizationName,
+    zipcode: zipcode,
+    radius: radius + 'mi',
+    limit: 5    // return top 5 providers found
   };
-  console.log('reqData=' + JSON.stringify(reqData));
+  logger.info('Input provParams=' + JSON.stringify(provParams));
 
-  geocoder.geocode(reqData, function(err, geoloc) {
+  // get a provider using a npi id
+  pokitdok.providers(provParams, function(err, res){
     if(err) {
-      // An error occurred getting location data, ask the user to try again.
+      // An error occurred finding providers, ask the user to try again.
       speechOutput = responses[intent.name].errorResponse.speechOutput;
       repromptText = responses[intent.name].errorResponse.repromptText;
-      console.log(err, geoloc.statusCode);
-    } 
+      logger.info(err, res.statusCode);
+    }
     else {
-      console.log('geocoded response=' + JSON.stringify(geoloc));
-      console.log('geoloc.zipcode=' + geoloc[0].zipcode);
-      //Log our input parameters
-      var provParams = {
-        zipcode: geoloc[0].zipcode,
-        radius: radius + 'mi',
-        limit: 3
-      };
-      console.log('Input provParams=' + JSON.stringify(provParams));
+      var provStr = '';
 
-      // get a provider using a npi id
-      pokitdok.providers(provParams, function(err, res){
-          if(err) {
-            // An error occurred finding providers, ask the user to try again.
-            speechOutput = responses[intent.name].errorResponse.speechOutput;
-            repromptText = responses[intent.name].errorResponse.repromptText;
-            console.log(err, res.statusCode);
-          }
-          else {
-            var provStr = '';
+      // Iterate through the provider names
+      for (var i = 0, ilen = res.data.length; i < ilen; i++) {
+        var provider = res.data[i].provider;
+        if(typeof provider.last_name !== 'undefined' && provider.last_name){
+          logger.info(provider.first_name + ' ' + provider.last_name);
+          provStr = provStr + provider.first_name + ' ' + provider.last_name + ', ';
+        }
+        else if (typeof provider.organization_name !== 'undefined' && provider.organization_name) {
+          logger.info(provider.organization_name);
+          provStr = provStr + provider.organization_name + ', ';
+        }
+      }
 
-            // print the provider names to the console
-            for (var i = 0, ilen = res.data.length; i < ilen; i++) {
-              var provider = res.data[i].provider;
-              if(typeof provider.last_name !== 'undefined' && provider.last_name){
-                console.log(provider.first_name + ' ' + provider.last_name);
-                provStr = provStr + provider.first_name + ' ' + provider.last_name + ', ';
-              }
-            }
-
-            // It worked! Read back all the providers found
-            speechOutput = util.format(responses[intent.name].speechOutput, provStr);
-            repromptText = util.format(responses[intent.name].repromptText, provStr);
-          }
-
-          callback(sessionAttributes,
-            helpers.buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
-      });
+      // It worked! Read back all the providers found
+      if(typeof specialty !== 'undefined' && specialty) {
+        speechOutput = util.format(responses[intent.name].speechOutput, specialty, provStr);
+        repromptText = util.format(responses[intent.name].repromptText, specialty, provStr);
+      }
+      else {
+        speechOutput = util.format(responses[intent.name].speechOutput, '', provStr);
+        repromptText = util.format(responses[intent.name].repromptText, '', provStr);
+      }
     }
 
+    callback(sessionAttributes,
+      helpers.buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
   });
 };

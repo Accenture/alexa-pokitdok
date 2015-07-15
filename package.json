@@ -27,13 +27,15 @@
     "config": "^1.14.0",
     "node-geocoder": "^2.21.2",
     "node-usps": "0.0.2",
-    "pokitdok-nodejs": "0.0.7"
+    "pokitdok-nodejs": "0.0.7",
+    "winston": "1.0.*"
   },
   "bundledDependencies": [
     "pokitdok-nodejs",
     "node-usps",
     "config",
-    "node-geocoder"
+    "node-geocoder",
+    "winston"
   ],
   "devDependencies": {
     "chai": "3.*",

@@ -1,5 +1,9 @@
 'use strict';
 
+/* jshint ignore:start */
+var logger = require('winston');
+/* jshint ignore:end */
+
 // Load configuration
 var cfg = require('config');
 var pkdApiConfig = cfg.get('pokitdok.api');
@@ -30,11 +34,19 @@ exports.executeIntent = function (intent, session, callback) {
     var shouldEndSession = false;
     var speechOutput = ''; 
 
+    if(helpers.promptToCollectData(session, cardTitle, 'Ok, let me find you some health plans, first', callback)) {
+      return;
+    }
+
+    var state = helpers.getSessionValue(session, 'state');
+    var city = helpers.getSessionValue(session, 'city');
+    var zipcode = helpers.getSessionValue(session, 'zipcode');
+
     //Default planType to 'PPO' if not specified
     var planType = planTypeSlot.value || 'PPO';
 
     //Convert name of state to abbreviation
-    var state = stateSlot.value;
+    state = stateSlot.value || state;
     var address = new usps.AddressBuilder();
     address.State = state;
     address = address.abbreviate();
@@ -43,9 +55,11 @@ exports.executeIntent = function (intent, session, callback) {
     //Log our input parameters
     var planParams = {
         plan_type: planType,
-        state: state
+        state: state,
+        city: city,
+        zipcode: zipcode
     };
-    console.log('Input planParams=' + JSON.stringify(planParams));
+    logger.info('Input planParams=' + JSON.stringify(planParams));
 
     // fetch plan information based on planType and state inputs
     pokitdok.plans(planParams, function (err, res) {
@@ -53,7 +67,7 @@ exports.executeIntent = function (intent, session, callback) {
             //An error occurred, ask the user to try again.
             speechOutput = responses[intent.name].errorResponse.speechOutput;
             repromptText = responses[intent.name].errorResponse.repromptText;
-            console.log(err, res.statusCode);
+            logger.info(err, res.statusCode);
         }
         else {
             var planStr = '';
@@ -61,7 +75,7 @@ exports.executeIntent = function (intent, session, callback) {
             // print the plan names and ids to the console
             for (var i = 0, ilen = res.data.length; i < ilen; i++) {
                 var plan = res.data[i];
-                console.log(plan.plan_name);
+                logger.info(plan.plan_name);
                 planStr = planStr + plan.plan_name + ', ';
             }
 

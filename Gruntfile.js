@@ -97,13 +97,14 @@ module.exports = function (grunt) {
       },
       all: {
         options: {
-          force: false
+          force: false,
+          verbose: true
         },
         src: [
           'index.js',
           'Gruntfile.js',
           'scripts/{,*/}*.js',
-          'test/specs/{,*/}*.js'
+          'test/{,*/}*.js'
         ]
       },
       gruntfile: {
@@ -125,7 +126,7 @@ module.exports = function (grunt) {
   ]);
 
 	grunt.registerTask('build', [
-    'jshint:all',
+    //'test',
     'clean:pokitdok',
 		'lambda_package'
 	]);

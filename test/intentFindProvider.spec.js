@@ -1,5 +1,9 @@
 'use strict';
 
+/* jshint ignore:start */
+var logger = require('winston');
+/* jshint ignore:end */
+
 // Setup test libraries
 var chai = require('chai');
 var should = require('chai').should();
@@ -20,8 +24,14 @@ describe('Find Providers', function() {
 	      'applicationId': 'amzn1.echo-sdk-ams.app.alexa-pokitdok-test'
 	    },
 	    'sessionId': 'session1234',
-	    'attributes': { 
-	    	'username':'Michael Klein'
+	    'attributes': {
+	    	'nameSet': true,
+	    	'addressSet': true,
+	    	'username':'Michael Klein',
+	    	'streetAddress':'1201 Fannin Street',
+	    	//'city':'Houston',
+	    	'state':'TX',
+	    	'zipcode':'77002'
 	    },
 	    'user': {
 	      'userId': null
@@ -47,7 +57,7 @@ describe('Find Providers', function() {
 	        },
 	        'radius': {
 	          'name': 'radius',
-	          'value': '1'
+	          'value': '10'
 	        },
 	        'specialty': {
 	          'name': 'specialty',
@@ -56,7 +66,19 @@ describe('Find Providers', function() {
 	        'zipcode': {
 	          'name': 'zipcode',
 	          'value': '77002'
-	        }
+	        }/*,
+	        'firstName': {
+	        	'name': 'firstName',
+	        	'value': 'COURTNEY'
+	        },
+	        'lastName': {
+	        	'name': 'lastName',
+	        	'value': 'MCCRAY'
+	        },
+	        'organizationName': {
+	        	'name': 'organizationName',
+	        	'value': 'APRIA HEALTHCARE LLC'
+	        }*/
 	      }
 	    }
 	  }
@@ -81,6 +103,10 @@ describe('Find Providers', function() {
 
 						it('should have output speech type of \'PlainText\'', function () {
 							result.response.outputSpeech.type.should.equal('PlainText');
+						});
+
+						it('should not say no providers could be found', function() {
+							result.response.outputSpeech.text.should.not.contain('could not find');
 						});
 
 						it('shoud return reprompt output speech text', function () {

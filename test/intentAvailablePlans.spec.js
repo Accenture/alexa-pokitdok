@@ -1,5 +1,9 @@
 'use strict';
 
+/* jshint ignore:start */
+var logger = require('winston');
+/* jshint ignore:end */
+
 // Setup test libraries
 var chai = require('chai');
 var should = require('chai').should();
@@ -21,7 +25,13 @@ describe('Find Available Plans', function() {
 	    },
 	    'sessionId': 'session1234',
 	    'attributes': {
-	    	'username':'Michael Klein'
+	    	'nameSet': true,
+	    	'addressSet': true,
+	    	'username':'Michael Klein',
+	    	'streetAddress':'1201 Fannin Street',
+	    	'city':'Houston',
+	    	'state':'TX',
+	    	'zipcode':'77002'
 	    },
 	    'user': {
 	      'userId': null
@@ -120,7 +130,7 @@ describe('Find Available Plans', function() {
 			// Call our lambda function with the Alexa event and the Alexa context
 			lambda.handler(eventData, ctx);
 
-		})
+		});
 	});
 
 });

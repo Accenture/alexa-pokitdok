@@ -1,5 +1,9 @@
 'use strict';
 
+/* jshint ignore:start */
+var logger = require('winston');
+/* jshint ignore:end */
+
 // Setup test libraries
 var chai = require('chai');
 var should = require('chai').should();
@@ -20,7 +24,10 @@ describe('Send MyName Intent', function() {
 	      'applicationId': 'amzn1.echo-sdk-ams.app.alexa-pokitdok-test'
 	    },
 	    'sessionId': 'session1234',
-	    'attributes': {},
+	    'attributes': {
+	    	'nameSet': false,
+	    	'addressSet': false
+	    },
 	    'user': {
 	      'userId': null
 	    }
@@ -47,7 +54,7 @@ describe('Send MyName Intent', function() {
 			// This is the async callback that will be called upon success
 			var success = function (result) {
 
-				describe('Find Providers', function() {
+				describe('Send MyName Intent', function() {
 					describe('#response-Success', function() {
 					
 						it('shoud return output speech text', function () {
@@ -74,6 +81,10 @@ describe('Send MyName Intent', function() {
 							result.response.shouldEndSession.should.equal(false);
 						});
 
+						it('should save name in the session', function() {
+							result.sessionAttributes.should.have.property('username').to.have.length.of.at.least(3);
+						});
+
 						it('should have card type of \'Simple\'', function () {
 							result.response.card.type.should.equal('Simple');
 						});
@@ -95,7 +106,7 @@ describe('Send MyName Intent', function() {
 			// This is the async callback that will be called upon failure
 			var failure = function (error) {
 
-				describe('Find Providers', function() {
+				describe('Send MyName Intent', function() {
 					describe('#response-Error', function() {
 
 						it('shoud not return an error', function () {

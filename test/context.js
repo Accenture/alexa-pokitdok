@@ -1,11 +1,15 @@
 'use strict';
 
+/* jshint ignore:start */
+var logger = require('winston');
+/* jshint ignore:end */
+
 exports.buildContext = function (success_callback, fail_callback) {
 	return {
 	    done: function (error, result) {
-	    		console.log('error=' + error);
+	    		logger.error('error=' + error);
 	        if (error === null) {
-	            //this.succeed(result);
+	            this.succeed(result);
 	        } else {
 	            this.fail(error);
 	        }

@@ -16,12 +16,14 @@
   "strict": true,
   "trailing": true,
   "smarttabs": true,
+  "jquery": false, 
   "globals": {
     "config": false
   },
   "predef": [
     "describe",
     "it",
-    "require"
+    "require",
+    "logger"
   ]
 }

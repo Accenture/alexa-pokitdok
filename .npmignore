@@ -4,3 +4,4 @@ event.json
 config/dev.json
 config/default.example.json
 test/
+logs/
