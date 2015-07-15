@@ -27,9 +27,13 @@ describe('Find Providers', function() {
 	    'attributes': {
 	    	'nameSet': true,
 	    	'addressSet': true,
+	    	'foundPlans': false,
+	    	'foundProvider': false,
+	    	'recentIntent': 'MyAddress',
+	    	'previousIntent': 'MyName',
 	    	'username':'Michael Klein',
-	    	'streetAddress':'1201 Fannin Street',
-	    	//'city':'Houston',
+	    	'streetAddress':'111 main street',
+	    	'city':'Houston',
 	    	'state':'TX',
 	    	'zipcode':'77002'
 	    },

@@ -26,7 +26,9 @@ describe('Send MyName Intent', function() {
 	    'sessionId': 'session1234',
 	    'attributes': {
 	    	'nameSet': false,
-	    	'addressSet': false
+	    	'addressSet': false,
+	    	'recentIntent': 'Hello',
+	    	'previousIntent': null
 	    },
 	    'user': {
 	      'userId': null

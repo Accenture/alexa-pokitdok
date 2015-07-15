@@ -23,16 +23,15 @@ exports.executeIntent = function (intent, session, callback) {
   var name = nameSlot.value;
 
   var speechOutput = util.format(responses[intent.name].speechOutput, name);
-  var repromptText = responses[intent.name].repromptText;
 
-  var sessionAttributes = helpers.setSessionValue(session, 'username', name);
-  sessionAttributes = helpers.setSessionValue(session, 'nameSet', true);
-  session.attributes = sessionAttributes;
+  session.attributes = helpers.setSessionValue(session, 'username', name);
+  session.attributes = helpers.setSessionValue(session, 'nameSet', true);
+  session.attributes = helpers.setSessionValue(session, 'recentIntentSuccessful', true);
 
   if(helpers.promptToCollectData(session, cardTitle, speechOutput, callback)) {
   	return;
   }
 
-  callback(sessionAttributes,
-      helpers.buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+  callback(session,
+      helpers.buildSpeechletResponse(cardTitle, speechOutput, session, shouldEndSession));
 };

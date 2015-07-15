@@ -48,8 +48,6 @@ function getSlotValue(intent, slotName) {
 
 exports.executeIntent = function (intent, session, callback) {
   var cardTitle = responses[intent.name].cardTitle;
-  var repromptText = '';
-  var sessionAttributes = session.attributes;
   var shouldEndSession = false;
   var speechOutput = '';
 
@@ -66,7 +64,6 @@ exports.executeIntent = function (intent, session, callback) {
     if(err) {
       // An error occurred getting location data, ask the user to try again.
       speechOutput = responses[intent.name].errorResponse.speechOutput;
-      repromptText = responses[intent.name].errorResponse.repromptText;
       logger.info(err, geoloc.statusCode);
     } 
     else {
@@ -82,34 +79,34 @@ exports.executeIntent = function (intent, session, callback) {
 
       // Save values returned into the Alexa session
       if(typeof streetNumber !== 'undefined' && typeof streetName !== 'undefined' && streetNumber && streetName) {
-     		sessionAttributes = helpers.setSessionValue(session, 'streetAddress', streetNumber + ' ' + streetName);
+     		session.attributes = helpers.setSessionValue(session, 'streetAddress', streetNumber + ' ' + streetName);
     	}
 
     	if(typeof city !== 'undefined' && city) {
-      	sessionAttributes = helpers.setSessionValue(session, 'city', city);
+      	session.attributes = helpers.setSessionValue(session, 'city', city);
       }
 
       if(typeof stateCode !== 'undefined' && stateCode) {
-      	sessionAttributes = helpers.setSessionValue(session, 'state', stateCode);
+      	session.attributes = helpers.setSessionValue(session, 'state', stateCode);
       }
 
       if(typeof zipcode !== 'undefined' && zipcode) {
-      	sessionAttributes = helpers.setSessionValue(session, 'zipcode', zipcode);
+      	session.attributes = helpers.setSessionValue(session, 'zipcode', zipcode);
       }
 
      	speechOutput = util.format(responses[intent.name].speechOutput, city, state);
-	  	repromptText = util.format(responses[intent.name].repromptText, city, state);
     }
 
-    sessionAttributes = helpers.setSessionValue(session, 'addressSet', true);
-    session.attributes = sessionAttributes;
+    session.attributes = helpers.setSessionValue(session, 'addressSet', true);
+    session.attributes = helpers.setSessionValue(session, 'recentIntentSuccessful', true);
 
     if(helpers.promptToCollectData(session, cardTitle, speechOutput, callback)) {
       return;
     }
 
-	  callback(sessionAttributes,
-	      helpers.buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+    session.attributes = helpers.setSessionValue(session, 'recentIntentSuccessful', true);
+	  callback(session,
+	      helpers.buildSpeechletResponse(cardTitle, speechOutput, session, shouldEndSession));
   });
 
 

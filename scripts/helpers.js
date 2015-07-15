@@ -8,9 +8,12 @@ var logger = require('winston');
 var cfg = require('config');
 var responses = cfg.get('responses.regions.' + cfg.get('global').region);
 
+var reprompt = require('./reprompt.js');
+
 // --------------- Helpers that build all of the responses -----------------------
 
-exports.buildSpeechletResponse = function (title, output, repromptText, shouldEndSession) {
+exports.buildSpeechletResponse = function (title, output, session, shouldEndSession) {
+    var repromptText = reprompt.buildRepromptText(session);
     var response = {
         outputSpeech: {
             type: 'PlainText',
@@ -34,12 +37,25 @@ exports.buildSpeechletResponse = function (title, output, repromptText, shouldEn
     return response;
 };
 
-exports.buildResponse = function (sessionAttributes, speechletResponse) {
+exports.buildResponse = function (session, speechletResponse) {
+    // If we will be ending the session in this response with the 'shouldEndSession: true'
+    // then we should make sure to execute our session cleanup logic
+    if(speechletResponse.shouldEndSession) {
+        var route = require('./sessionEnd.js');
+        var sessionEndedRequest = {
+            type: 'SessionEndedRequest',
+            requestId: 'request-ShouldEndSession'
+        };
+        route.onSessionEnded(sessionEndedRequest, session);
+    }
+
+    // Format the response to be sent back to Alexa
     var response = {
         version: '1.0',
-        sessionAttributes: sessionAttributes,
+        sessionAttributes: session.attributes,
         response: speechletResponse
     };
+
     logger.info('Response=' + JSON.stringify(response));
     return response;
 };
@@ -64,27 +80,23 @@ exports.getSessionValue = function (session, label) {
 };
 
 exports.promptToCollectData = function (session, cardTitle, speechOutput, callback) {
-    var sessionAttributes = session.attributes;
     var shouldEndSession = false;
     var nameSet = this.getSessionValue(session, 'nameSet');
     var addressSet = this.getSessionValue(session, 'addressSet');
-    var repromptText = '';
     var reprompt = false;
 
     if(typeof nameSet==='undefined' || !nameSet) {
         speechOutput = speechOutput + ' ' + responses.promptData.nameResponse.speechOutput;
-        repromptText = responses.promptData.nameResponse.repromptText;
         reprompt = true;
     }
     else if(typeof addressSet==='undefined' || !addressSet) {
         speechOutput = speechOutput + ' ' + responses.promptData.addressResponse.speechOutput;
-        repromptText = responses.promptData.addressResponse.repromptText;
         reprompt = true;
     }
 
     if(reprompt) {
-        callback(sessionAttributes,
-          this.buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+        callback(session,
+          this.buildSpeechletResponse(cardTitle, speechOutput, session, shouldEndSession));
     }
 
     return reprompt;

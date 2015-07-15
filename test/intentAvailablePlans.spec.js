@@ -27,6 +27,8 @@ describe('Find Available Plans', function() {
 	    'attributes': {
 	    	'nameSet': true,
 	    	'addressSet': true,
+	    	'recentIntent': 'FindProviders',
+	    	'previousIntent': 'MyAddress',
 	    	'username':'Michael Klein',
 	    	'streetAddress':'1201 Fannin Street',
 	    	'city':'Houston',

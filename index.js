@@ -28,6 +28,11 @@ function onIntent(intentRequest, session, callback) {
 
     logger.info('intentName=' + intentName);
 
+    // Keep track of what the user most recently was trying to do. This will be helpful for reprompting users for information
+    session.attributes = helpers.setSessionValue(session, 'previousIntent', helpers.getSessionValue(session, 'recentIntent'));
+    session.attributes = helpers.setSessionValue(session, 'recentIntent', intentName);
+    session.attributes = helpers.setSessionValue(session, 'recentIntentSuccessful', false);
+
     // Define the route to your skill's intent handler
     var route = require('./scripts/intent' + intentName + '.js');
 
@@ -71,16 +76,16 @@ exports.handler = function (event, context) {
             route = require('./scripts/onLaunch.js');
             route.onLaunch(event.request,
                      event.session,
-                     function callback(sessionAttributes, speechletResponse) {
-                        context.succeed(helpers.buildResponse(sessionAttributes, speechletResponse));
+                     function callback(session, speechletResponse) {
+                        context.succeed(helpers.buildResponse(session, speechletResponse));
                      });
         }
         // 
         else if (event.request.type === 'IntentRequest') {
             onIntent(event.request,
                      event.session,
-                     function callback(sessionAttributes, speechletResponse) {
-                         context.succeed(helpers.buildResponse(sessionAttributes, speechletResponse));
+                     function callback(session, speechletResponse) {
+                         context.succeed(helpers.buildResponse(session, speechletResponse));
                      });
         } 
         else if (event.request.type === 'SessionEndedRequest') {

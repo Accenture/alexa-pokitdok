@@ -27,6 +27,8 @@ describe('Send MyAddress Intent', function() {
 	    'attributes': {
 	    	'nameSet': true,
 	    	'addressSet': false,
+	    	'recentIntent': 'MyName',
+	    	'previousIntent': 'Hello',
 	    	'username':'Michael Klein'
 	    },
 	    'user': {

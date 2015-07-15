@@ -3,6 +3,7 @@ HelpMe hi
 HelpMe what's up
 HelpMe for help
 HelpMe help
+HelpMe for advice
 Cancel cancel
 Cancel quit
 Cancel leave
@@ -21,7 +22,19 @@ MyAddress my address is {fifty one tweleve|streetNumber} {valleywood boulevard|s
 MyAddress my address is {one two three four|streetNumber} {main street|streetName} {houston|city}
 MyAddress my address is {one two three|streetNumber} {main street|streetName} {houston|city}
 MyAddress my address is {one eight six|streetNumber} {loopback circle|streetName} {houston|city}
-MyAddress my address is {houston|city} {texas|state}
+MyAddress change location to {one twenty three|streetNumber} {main street|streetName} {houston|city} {texas|state}
+MyAddress change location to {one two three four|streetNumber} {main street|streetName} {houston|city} {texas|state}
+MyAddress change location to {one two three|streetNumber} {main street|streetName} {houston|city} {texas|state}
+MyAddress change location to {five eleven|streetNumber} {winding trails road|streetName} {houston|city} {texas|state}
+MyAddress change location to {fifty one tweleve|streetNumber} {valleywood boulevard|streetName} {houston|city} {texas|state}
+MyAddress change location to {one eight six|streetNumber} {loopback circle|streetName} {houston|city} {texas|state}
+MyAddress change location to {one twenty three|streetNumber} {main street|streetName} {houston|city}
+MyAddress change location to {five eleven|streetNumber} {winding trails road|streetName} {houston|city}
+MyAddress change location to {fifty one tweleve|streetNumber} {valleywood boulevard|streetName} {houston|city}
+MyAddress change location to {one two three four|streetNumber} {main street|streetName} {houston|city}
+MyAddress change location to {one two three|streetNumber} {main street|streetName} {houston|city}
+MyAddress change location to {one eight six|streetNumber} {loopback circle|streetName} {houston|city}
+MyAddress change location to {houston|city} {texas|state}
 FindProvider find {internal medicine|specialty} doctors
 FindProvider what {internal medicine|specialty} doctors
 FindProvider find doctors

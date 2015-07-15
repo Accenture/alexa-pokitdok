@@ -29,8 +29,6 @@ exports.executeIntent = function (intent, session, callback) {
     var cardTitle = responses[intent.name].cardTitle;
     var stateSlot = intent.slots.state;
     var planTypeSlot = intent.slots.planType;
-    var repromptText = '';
-    var sessionAttributes = session.attributes;
     var shouldEndSession = false;
     var speechOutput = ''; 
 
@@ -66,7 +64,6 @@ exports.executeIntent = function (intent, session, callback) {
         if (err) {
             //An error occurred, ask the user to try again.
             speechOutput = responses[intent.name].errorResponse.speechOutput;
-            repromptText = responses[intent.name].errorResponse.repromptText;
             logger.info(err, res.statusCode);
         }
         else {
@@ -81,10 +78,10 @@ exports.executeIntent = function (intent, session, callback) {
 
             // It worked! Read back all the plans found
             speechOutput = util.format(responses[intent.name].speechOutput, planStr);
-            repromptText = util.format(responses[intent.name].repromptText, planStr);
+            session.attributes = helpers.setSessionValue(session, 'recentIntentSuccessful', true);
         }
 
-        callback(sessionAttributes,
-            helpers.buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+        callback(session,
+            helpers.buildSpeechletResponse(cardTitle, speechOutput, session, shouldEndSession));
     });
 };

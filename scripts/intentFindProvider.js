@@ -9,7 +9,6 @@ var cfg = require('config');
 var pkdApiConfig = cfg.get('pokitdok.api');
 var responses = cfg.get('responses.regions.' + cfg.get('global').region);
 
-
 // get a connection to the PokitDok Platform for the most recent version
 var PokitDok = require('pokitdok-nodejs');
 var pokitdok = new PokitDok(pkdApiConfig.clientId, pkdApiConfig.clientSecret, pkdApiConfig.apiVersion);
@@ -33,8 +32,6 @@ function getSlotValue(intent, slotName) {
 
 exports.executeIntent = function (intent, session, callback) {
   var cardTitle = responses[intent.name].cardTitle;
-  var repromptText = '';
-  var sessionAttributes = session.attributes;
   var shouldEndSession = false;
   var speechOutput = '';
 
@@ -70,7 +67,6 @@ exports.executeIntent = function (intent, session, callback) {
     if(err) {
       // An error occurred finding providers, ask the user to try again.
       speechOutput = responses[intent.name].errorResponse.speechOutput;
-      repromptText = responses[intent.name].errorResponse.repromptText;
       logger.info(err, res.statusCode);
     }
     else {
@@ -92,15 +88,14 @@ exports.executeIntent = function (intent, session, callback) {
       // It worked! Read back all the providers found
       if(typeof specialty !== 'undefined' && specialty) {
         speechOutput = util.format(responses[intent.name].speechOutput, specialty, provStr);
-        repromptText = util.format(responses[intent.name].repromptText, specialty, provStr);
       }
       else {
         speechOutput = util.format(responses[intent.name].speechOutput, '', provStr);
-        repromptText = util.format(responses[intent.name].repromptText, '', provStr);
       }
+      session.attributes = helpers.setSessionValue(session, 'recentIntentSuccessful', true);
     }
 
-    callback(sessionAttributes,
-      helpers.buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+    callback(session,
+      helpers.buildSpeechletResponse(cardTitle, speechOutput, session, shouldEndSession));
   });
 };

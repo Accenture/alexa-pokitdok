@@ -40,6 +40,10 @@ module.exports = function (grunt) {
           files: 'Gruntfile.js',
           tasks: ['jshint:gruntfile']
       },
+      config: {
+        files: 'config/*.json',
+        tasks: ['test']
+      },
       src: {
           files: ['index.js', 'scripts/*.js'],
           tasks: ['test']
@@ -76,7 +80,7 @@ module.exports = function (grunt) {
         //Update deployment location here
         arn: 'arn:aws:lambda:us-east-1:651084418096:function:alexa-pokitdok',
         options: {
-	        timeout : 3,
+	        timeout : 5,
 	        memory: 128
         }
       }
