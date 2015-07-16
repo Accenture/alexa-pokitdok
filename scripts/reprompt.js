@@ -35,6 +35,10 @@ exports.buildRepromptText = function (session) {
     		logger.debug('Reprompt: Everything was sucessful and they have already searched for doctors. Let\'s advertise to try available health plans');
     		repromptText = responses.reprompts.AdvertiseAvailablePlans;
     	}
+        else {
+            logger.debug('Reprompt: Everything was sucessful and they have already searched for health plans. Let\'s advertise to try to find a doctors');
+            repromptText = responses.reprompts.AdvertiseFindProviders;
+        }
     	
     }
     else if (!nameSet) {
