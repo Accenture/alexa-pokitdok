@@ -14,24 +14,24 @@
       "colorize": true,
       "json": false,
       "stringify":  false,
-      "prettyPrint": false,
+      "prettyPrint": true,
       "depth": null,
-      "humanReadableUnhandledException": false,
+      "humanReadableUnhandledException": true,
       "showLevel": true
     },
     "file": {
       "enabled": false,
       "filename": "./logs/logfile.txt",
-      "logLevel": "debug",
+      "logLevel": "info",
       "silent": false,
-      "colorize": true,
+      "colorize": false,
       "timestamp": true,
       "maxsize": 5000,
       "json": false,
-      "prettyPrint": false,
+      "prettyPrint": true,
       "depth": null,
       "logstash": false,
-      "tailable": true,
+      "tailable": false,
       "showLevel": false
     }
   },
@@ -56,11 +56,11 @@
         "onLaunch": {
           "cardTitle": "Welcome!",
           "speechOutput": "Welcome to the Alexa Pokitdok demo, we can meet all your health needs by just listening to your voice.",
-          "repromptText": "I'm sorry, I missed that. What is your name?",
-          "errorResponse": {
-            "speechOutput": "Welcome to the Alexa Pokitdok demo, we can meet all your health needs by just listening to your voice. Let's start by getting to know you, what is your name?",
-            "repromptText": "I'm sorry, I missed that. What is your name?"
-          }
+          "errorSpeechOutput": "Welcome to the Alexa Pokitdok demo, we can meet all your health needs by just listening to your voice. Let's start by getting to know you, what is your name?"
+        },
+        "reprompts": {
+          "AdvertiseAvailablePlans": "I'm sorry, I missed that. Would you like to try finding available health plans in your state? Try saying, find a available health plans.",
+          "AdvertiseFindProviders": "I'm sorry, I missed that. Would you like to try finding doctors nearby? Try saying, find a internal medicine doctots nearby."
         },
         "promptData": {
           "nameResponse": {
@@ -101,7 +101,7 @@
         },
         "MyAddress": {
           "cardTitle": "Your Address",
-          "speechOutput": "Thank you for sharing your address in %s, %s.",
+          "speechOutput": "Thank you for sharing your address in %s, %s. Now that we know where you are you can search for doctors or find available health plans. Try saying find internal medicine doctors nearby",
           "repromptText": "I'm sorry, I had trouble finding that address. Could you say your address again? For example, say I live at 111 Main Street, Houston Texas",
           "errorResponse": {
             "speechOutput": "I'm sorry, I had trouble finding that address. Could you say your address again? For example, say I live at 111 Main Street, Houston Texas",
@@ -110,7 +110,7 @@
         },
         "AvailablePlans": {
           "cardTitle": "Available Plans",
-          "speechOutput": "We found the following plans in your state, %s, you can ask me to find additional plans by saying, find PPO plans for Texas",
+          "speechOutput": "We found the following plans in your state, %s, . Would you like to try finding doctors nearby. Try saying, find internal medicine doctors nearby",
           "repromptText": "I could not find any plans for your location, you can ask me to find available plans by saying, find PPO plans for Texas",
           "errorResponse": {
             "speechOutput": "I could not find any plans for your location, please try again",
@@ -119,7 +119,7 @@
         },
         "FindProvider": {
           "cardTitle": "Find a Doctor",
-          "speechOutput": "We found the following %s doctors near your location, %s",
+          "speechOutput": "We found the following %s doctors near your location, %s. Would you like to find a different type of doctor? Try saying, find endocrinology doctors.",
           "repromptText": "I could not find any providers near your location, please try again",
           "errorResponse": {
             "speechOutput": "I could not find any providers near your location, please try again",

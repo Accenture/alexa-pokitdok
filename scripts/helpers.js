@@ -10,8 +10,6 @@ var responses = cfg.get('responses.regions.' + cfg.get('global').region);
 
 var reprompt = require('./reprompt.js');
 
-// --------------- Helpers that build all of the responses -----------------------
-
 exports.buildSpeechletResponse = function (title, output, session, shouldEndSession) {
     var repromptText = reprompt.buildRepromptText(session);
     var response = {
