@@ -95,6 +95,15 @@ module.exports = function (grunt) {
           dest: 'config/default.json'
         }]
       },
+       // Copy the test configuration file, to the default config file, 
+       // this is only necessary if you have not configured your local environment
+       // variable to 'export NODE_ENV=test'
+      testConfig: {
+        files: [{
+          src: ['config/test.json'],
+          dest: 'config/default.json'
+        }]
+      },
        // Copy the dev configuration file, to the default config file, 
        // this is only necessary if you have not configured your local environment
        // variable to 'export NODE_ENV=dev'
@@ -161,6 +170,7 @@ module.exports = function (grunt) {
     'jshint:all',
     //'mochaTest',    // lambda_package does not execute successfully when unit tests are performed in the same build task
     'clean:pokitdok',
+    'copy:testConfig',
 		'lambda_package'
 	]);
 
