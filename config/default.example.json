@@ -20,7 +20,7 @@
       "showLevel": true
     },
     "file": {
-      "enabled": true,
+      "enabled": false,
       "filename": "./logs/logfile.txt",
       "logLevel": "debug",
       "silent": false,

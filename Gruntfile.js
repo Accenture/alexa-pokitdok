@@ -86,6 +86,34 @@ module.exports = function (grunt) {
       }
     },
 
+    copy: {
+       // Copy the production configuration file, to the default config file, 
+       // since AWS Lambda does not support environment variables, we must use default.json
+      prodConfig: {
+        files: [{
+          src: ['config/production.json'],
+          dest: 'config/default.json'
+        }]
+      },
+       // Copy the dev configuration file, to the default config file, 
+       // this is only necessary if you have not configured your local environment
+       // variable to 'export NODE_ENV=dev'
+      devConfig: {
+        files: [{
+          src: ['config/dev.json'],
+          dest: 'config/default.json'
+        }]
+      },
+       // Copy the example default configuration to the actual default config file. This
+       // is useful only when you are starting out your project
+      exampleConfig: {
+        files: [{
+          src: ['config/default.example.json'],
+          dest: 'config/default.json'
+        }]
+      },
+    },
+
 
     clean: {
       //Delete extra directories included in the Pokitdok package that are unnecessary and cause deployment errors

@@ -31,7 +31,7 @@ exports.buildRepromptText = function (session) {
     if(nameSet && addressSet) {
 
     	var foundProvider = getSessionValue(session, 'recentIntentSuccessful');
-    	if(typeof foundProvider !== 'undefiend' && foundProvider) {
+    	if(typeof foundProvider !== 'undefined' && foundProvider) {
     		logger.debug('Reprompt: Everything was sucessful and they have already searched for doctors. Let\'s advertise to try available health plans');
     		repromptText = responses.reprompts.AdvertiseAvailablePlans;
     	}
