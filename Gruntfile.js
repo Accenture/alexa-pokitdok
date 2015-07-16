@@ -158,7 +158,8 @@ module.exports = function (grunt) {
   ]);
 
 	grunt.registerTask('build', [
-    //'test',
+    'jshint:all',
+    //'mochaTest',    // lambda_package does not execute successfully when unit tests are performed in the same build task
     'clean:pokitdok',
 		'lambda_package'
 	]);
