@@ -1,7 +1,7 @@
 'use strict';
 
 /* jshint ignore:start */
-var logger = require('winston');
+var logger = require('./logger.js');
 /* jshint ignore:end */
 
 // Load configuration
@@ -27,6 +27,7 @@ exports.executeIntent = function (intent, session, callback) {
   session.attributes = helpers.setSessionValue(session, 'username', name);
   session.attributes = helpers.setSessionValue(session, 'nameSet', true);
   session.attributes = helpers.setSessionValue(session, 'recentIntentSuccessful', true);
+  logger.info('Saved name as: %s', name);
 
   if(helpers.promptToCollectData(session, cardTitle, speechOutput, callback)) {
   	return;

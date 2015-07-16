@@ -1,7 +1,7 @@
 'use strict';
 
 /* jshint ignore:start */
-var logger = require('winston');
+var logger = require('./logger.js');
 /* jshint ignore:end */
 
 // Load configuration
@@ -21,6 +21,7 @@ exports.executeIntent = function (intent, session, callback) {
     return;
   }
 
+  logger.info('Returned help speech output to user');
   callback(session,
     helpers.buildSpeechletResponse(cardTitle, speechOutput, session, shouldEndSession));
 };

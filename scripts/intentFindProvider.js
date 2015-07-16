@@ -1,7 +1,7 @@
 'use strict';
 
 /* jshint ignore:start */
-var logger = require('winston');
+var logger = require('./logger.js');
 /* jshint ignore:end */
 
 // Load configuration
@@ -60,27 +60,31 @@ exports.executeIntent = function (intent, session, callback) {
     radius: radius + 'mi',
     limit: 5    // return top 5 providers found
   };
-  logger.info('Input provParams=' + JSON.stringify(provParams));
+  logger.info('Input Parameters to PokitDok provider search', provParams);
 
   // get a provider using a npi id
   pokitdok.providers(provParams, function(err, res){
     if(err) {
       // An error occurred finding providers, ask the user to try again.
       speechOutput = responses[intent.name].errorResponse.speechOutput;
-      logger.info(err, res.statusCode);
+      logger.error('PokitDok API - Error Occurred:', err);
     }
     else {
       var provStr = '';
+
+      if(res.data.length>1) {
+          logger.info('Found (' + res.data.length + ') providers');
+      }
 
       // Iterate through the provider names
       for (var i = 0, ilen = res.data.length; i < ilen; i++) {
         var provider = res.data[i].provider;
         if(typeof provider.last_name !== 'undefined' && provider.last_name){
-          logger.info(provider.first_name + ' ' + provider.last_name);
+          logger.debug('Provider #%s name is: %s', i, provider.first_name + ' ' + provider.last_name);
           provStr = provStr + provider.first_name + ' ' + provider.last_name + ', ';
         }
         else if (typeof provider.organization_name !== 'undefined' && provider.organization_name) {
-          logger.info(provider.organization_name);
+          logger.debug('Provider #%s name is: %s', i, provider.organization_name);
           provStr = provStr + provider.organization_name + ', ';
         }
       }

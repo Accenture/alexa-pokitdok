@@ -1,7 +1,8 @@
 'use strict';
+/* jshint unused:false */
 
 /* jshint ignore:start */
-var logger = require('winston');
+var logger = require('./logger.js');
 /* jshint ignore:end */
 
 /**
@@ -9,7 +10,7 @@ var logger = require('winston');
  * Is not called when the skill returns shouldEndSession=true.
  */
 exports.onSessionEnded = function (sessionEndedRequest, session) {
-    logger.info('onSessionEnded requestId=' + sessionEndedRequest.requestId + 
-            ', session=' + JSON.stringify(session));
     // Add cleanup logic here
+
+    logger.info('Successfully ended session');
 };

@@ -1,7 +1,7 @@
 'use strict';
 
 /* jshint ignore:start */
-var logger = require('winston');
+var logger = require('./logger.js');
 /* jshint ignore:end */
 
 // Load configuration
@@ -57,22 +57,26 @@ exports.executeIntent = function (intent, session, callback) {
         city: city,
         zipcode: zipcode
     };
-    logger.info('Input planParams=' + JSON.stringify(planParams));
+    logger.info('Input Parameters to PokitDok plan search:', planParams);
 
     // fetch plan information based on planType and state inputs
     pokitdok.plans(planParams, function (err, res) {
         if (err) {
             //An error occurred, ask the user to try again.
             speechOutput = responses[intent.name].errorResponse.speechOutput;
-            logger.info(err, res.statusCode);
+            logger.error('PokitDok API - Error Occurred:', err);
         }
         else {
             var planStr = '';
 
+            if(res.data.length>1) {
+                logger.info('Found (' + res.data.length + ') plans');
+            }
+
             // print the plan names and ids to the console
             for (var i = 0, ilen = res.data.length; i < ilen; i++) {
                 var plan = res.data[i];
-                logger.info(plan.plan_name);
+                logger.debug('Plan #%s found: %s', i, plan.plan_name);
                 planStr = planStr + plan.plan_name + ', ';
             }
 

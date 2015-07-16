@@ -1,7 +1,7 @@
 'use strict';
 
 /* jshint ignore:start */
-var logger = require('winston');
+var logger = require('./logger.js');
 /* jshint ignore:end */
 
 // Load configuration
@@ -33,7 +33,7 @@ exports.buildSpeechletResponse = function (title, output, session, shouldEndSess
         shouldEndSession: shouldEndSession
     };
 
-    //logger.info('Response=' + JSON.stringify(response));
+    //logger.info('Response:', response);
     return response;
 };
 
@@ -56,7 +56,8 @@ exports.buildResponse = function (session, speechletResponse) {
         response: speechletResponse
     };
 
-    logger.info('Response=' + JSON.stringify(response));
+    logger.info('Response returned: %s', response.response.outputSpeech.text);
+    logger.debug('Response:', response);
     return response;
 };
 
@@ -88,10 +89,12 @@ exports.promptToCollectData = function (session, cardTitle, speechOutput, callba
     if(typeof nameSet==='undefined' || !nameSet) {
         speechOutput = speechOutput + ' ' + responses.promptData.nameResponse.speechOutput;
         reprompt = true;
+        logger.info('Returned speech output to prompt for a user\'s name');
     }
     else if(typeof addressSet==='undefined' || !addressSet) {
         speechOutput = speechOutput + ' ' + responses.promptData.addressResponse.speechOutput;
         reprompt = true;
+        logger.info('Returned speech output to prompt for a user\'s address');
     }
 
     if(reprompt) {

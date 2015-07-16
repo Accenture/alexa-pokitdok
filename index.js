@@ -20,13 +20,10 @@ var logger = require('./scripts/logger.js');
  * Called when the user specifies an intent for this skill.
  */
 function onIntent(intentRequest, session, callback) {
-    logger.info('onIntent intent=' + JSON.stringify(intentRequest) +
-                ', session=' + JSON.stringify(session));
-
     var intent = intentRequest.intent,
         intentName = intentRequest.intent.name;
 
-    logger.info('intentName=' + intentName);
+    logger.info('Routing to intent handler: %s', intentName);
 
     // Keep track of what the user most recently was trying to do. This will be helpful for reprompting users for information
     session.attributes = helpers.setSessionValue(session, 'previousIntent', helpers.getSessionValue(session, 'recentIntent'));
@@ -47,7 +44,11 @@ function onIntent(intentRequest, session, callback) {
 */
 exports.handler = function (event, context) {
     try {
-        logger.info('event.session.application.applicationId=' + event.session.application.applicationId);
+        logger.event = event;
+        logger.debug('applicationId: %s', event.session.application.applicationId);
+        logger.debug('sessionId: %s', event.session.sessionId);
+        logger.debug('Alexa Request Event', event);
+        logger.silly('Alexa Context', context);
 
         /**
          * Uncomment this if statement and populate with your skill's application ID to
@@ -67,12 +68,14 @@ exports.handler = function (event, context) {
 
         // Logic for initializing a new session is contained in sessionStart.js
         if (event.session.new) {
+            logger.info('session=%s: started new sesion', event.session.sessionId);
             route = require('./scripts/sessionStart.js');
             event.session = route.onSessionStarted({requestId: event.request.requestId}, event.session);
         }
 
         // Handler for 'LaunchRequest' is called when the user launches the skill without specifying what they want.
         if (event.request.type === 'LaunchRequest') {
+            logger.info('Received a launch request, routing to onLaunch handler');
             route = require('./scripts/onLaunch.js');
             route.onLaunch(event.request,
                      event.session,
@@ -89,6 +92,7 @@ exports.handler = function (event, context) {
                      });
         } 
         else if (event.request.type === 'SessionEndedRequest') {
+            logger.info('Received a session end request, routing to onSessionEnded handler');
             route = require('./scripts/sessionEnd.js');
             route.onSessionEnded(event.request, event.session);
             context.succeed();

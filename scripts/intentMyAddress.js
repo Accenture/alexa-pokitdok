@@ -1,7 +1,7 @@
 'use strict';
 
 /* jshint ignore:start */
-var logger = require('winston');
+var logger = require('./logger.js');
 /* jshint ignore:end */
 
 // Load configuration
@@ -58,7 +58,7 @@ exports.executeIntent = function (intent, session, callback) {
   var zipcode = getSlotValue(intent, 'zipcode');
   var addressStr = streetNumber + ' ' + streetName + ' ' + city + ' ' + state + ' ' + zipcode;
 
-  logger.info('addressStr=' + addressStr);
+  logger.info('Search via Google API for address: %s', addressStr);
 
   geocoder.geocode(addressStr, function(err, geoloc) {
     if(err) {
@@ -67,7 +67,7 @@ exports.executeIntent = function (intent, session, callback) {
       logger.info(err, geoloc.statusCode);
     } 
     else {
-      logger.info('geocoded response=' + JSON.stringify(geoloc));
+      logger.debug('Google\'s geolocation response', geoloc);
 
       // Extract the geolocation data based on inputs to help resolve location
       var streetNumber = getGeoValue(geoloc, 'streetNumber');
@@ -83,7 +83,17 @@ exports.executeIntent = function (intent, session, callback) {
     	}
 
     	if(typeof city !== 'undefined' && city) {
+        // At least the city must have been found or else we are not successful
       	session.attributes = helpers.setSessionValue(session, 'city', city);
+        session.attributes = helpers.setSessionValue(session, 'addressSet', true);
+        session.attributes = helpers.setSessionValue(session, 'recentIntentSuccessful', true);
+        speechOutput = util.format(responses[intent.name].speechOutput, city, state);
+        logger.info('Found the city via speech or Google\'s API');
+      }
+      else {
+        // Did not find city, therefore not successful
+        speechOutput = responses[intent.name].errorResponse.speechOutput;
+        logger.error('Did not find the address the user specified');
       }
 
       if(typeof stateCode !== 'undefined' && stateCode) {
@@ -94,17 +104,12 @@ exports.executeIntent = function (intent, session, callback) {
       	session.attributes = helpers.setSessionValue(session, 'zipcode', zipcode);
       }
 
-     	speechOutput = util.format(responses[intent.name].speechOutput, city, state);
     }
-
-    session.attributes = helpers.setSessionValue(session, 'addressSet', true);
-    session.attributes = helpers.setSessionValue(session, 'recentIntentSuccessful', true);
 
     if(helpers.promptToCollectData(session, cardTitle, speechOutput, callback)) {
       return;
     }
 
-    session.attributes = helpers.setSessionValue(session, 'recentIntentSuccessful', true);
 	  callback(session,
 	      helpers.buildSpeechletResponse(cardTitle, speechOutput, session, shouldEndSession));
   });

@@ -1,16 +1,54 @@
 'use strict';
 
 var cfg = require('config');
+var util = require('util');
+
+var winston = require('winston');
 
 /* jshint ignore:start */
-var logger = require('winston');
+var logger = new (winston.Logger)();
 /* jshint ignore:end */
+
+// Initialize internal variables for keeping track of the session
+logger.event = {};
+
+function safeGet(obj, path) {
+  var pathArr = path.split('.');
+  var curObj = obj;
+
+  for (var i = 0, len = pathArr.length; i < len; i++) {
+    curObj = curObj[pathArr[i]];
+    if(typeof curObj === 'undefined' || !curObj){
+      return 'unknown';
+    }
+  }
+  return curObj;
+}
+
+// Replace winston's default log() function with our own in order to rewrite the
+// contents of all log statements. 
+logger.log = function(){
+  var args = arguments;
+  var msg = args[1];
+
+  // Capture the following variables to be included in all log statements
+  var sessionId = safeGet(this.event, 'session.sessionId');
+  var requestType = safeGet(this.event, 'request.type');
+  var intentName = safeGet(this.event, 'request.intent.name');
+  var userId = safeGet(this.event, 'session.user.userId');
+
+  // Apply the variables to the log statements
+  var msgFormat = 'sessionId="%s", requestType="%s", intentName="%s", userId="%s", message="%s"';
+  msg = util.format(msgFormat, sessionId, requestType, intentName, userId, msg);
+
+  args[1] = msg;
+
+  // Make sure to call the base log function
+  winston.Logger.prototype.log.apply(this,args);
+};
 
 // Get the log configuration from our app configuration file ('./config/NODE_ENV.json')
 var logConfig = cfg.get('logging');
-
-// Remove the default console logger
-logger.remove(logger.transports.Console);
 
 // Add a console logger if it is enabled
 if(logConfig.console.enabled) {
@@ -25,7 +63,7 @@ if(logConfig.console.enabled) {
 		showLevel: logConfig.console.showLevel
 	};
 
-	logger.add(logger.transports.Console, consoleOptions);
+	logger.add(winston.transports.Console, consoleOptions);
 }
 
 // Add a file logger if it is enabled
@@ -45,7 +83,7 @@ if(logConfig.file.enabled) {
     showLevel: logConfig.file.showLevel
 	};
 
-	logger.add(logger.transports.File, fileOptions);
+	logger.add(winston.transports.File, fileOptions);
 }
 
 module.exports=logger;
