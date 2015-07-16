@@ -35,35 +35,61 @@ MyAddress change location to {one two three four|streetNumber} {main street|stre
 MyAddress change location to {one two three|streetNumber} {main street|streetName} {houston|city}
 MyAddress change location to {one eight six|streetNumber} {loopback circle|streetName} {houston|city}
 MyAddress change location to {houston|city} {texas|state}
+MyAddress change address to {one twenty three|streetNumber} {main street|streetName} {houston|city} {texas|state}
+MyAddress change address to {one two three four|streetNumber} {main street|streetName} {houston|city} {texas|state}
+MyAddress change address to {one two three|streetNumber} {main street|streetName} {houston|city} {texas|state}
+MyAddress change address to {five eleven|streetNumber} {winding trails road|streetName} {houston|city} {texas|state}
+MyAddress change address to {fifty one tweleve|streetNumber} {valleywood boulevard|streetName} {houston|city} {texas|state}
+MyAddress change address to {one eight six|streetNumber} {loopback circle|streetName} {houston|city} {texas|state}
+MyAddress change address to {one twenty three|streetNumber} {main street|streetName} {houston|city}
+MyAddress change address to {five eleven|streetNumber} {winding trails road|streetName} {houston|city}
+MyAddress change address to {fifty one tweleve|streetNumber} {valleywood boulevard|streetName} {houston|city}
+MyAddress change address to {one two three four|streetNumber} {main street|streetName} {houston|city}
+MyAddress change address to {one two three|streetNumber} {main street|streetName} {houston|city}
+MyAddress change address to {one eight six|streetNumber} {loopback circle|streetName} {houston|city}
+MyAddress change address to {houston|city} {texas|state}
 FindProvider find {internal medicine|specialty} doctors
 FindProvider what {internal medicine|specialty} doctors
-FindProvider find doctors
-FindProvider what doctors
+FindProvider to find doctors
+FindProvider what doctors are availble
 FindProvider find {internal medicine|specialty} doctors near me
+FindProvider to find {internal medicine|specialty} doctors near me
 FindProvider what {internal medicine|specialty} doctors are near me
 FindProvider find doctors near me
+FindProvider to find doctors near me
 FindProvider what doctors are near me
 FindProvider find {internal medicine|specialty} doctors nearby
 FindProvider what {internal medicine|specialty} doctors are nearby
 FindProvider find doctors nearby
+FindProvider to find doctors nearby
 FindProvider what doctors are nearby
 FindProvider find doctors within {ten|radius} miles from me
 FindProvider find doctors within {ten|radius} miles
+FindProvider to find doctors within {ten|radius} miles from me
+FindProvider to find doctors within {ten|radius} miles
 FindProvider what doctors are within {ten|radius} miles from me
 FindProvider what doctors are within {ten|radius} miles
 AvailablePlans find available plans in {texas|state}
+AvailablePlans to find available plans in {texas|state}
 AvailablePlans what plans are available plans in {texas|state}
 AvailablePlans find available {PPO|planType} plans in {texas|state}
+AvailablePlans to find available {PPO|planType} plans in {texas|state}
 AvailablePlans what plans are available {PPO|planType} plans in {texas|state}
 AvailablePlans find available health plans in {texas|state}
+AvailablePlans to find available health plans in {texas|state}
 AvailablePlans what health plans are available plans in {texas|state}
 AvailablePlans find available {PPO|planType} health plans in {texas|state}
+AvailablePlans to find available {PPO|planType} health plans in {texas|state}
 AvailablePlans what plans are available {PPO|planType} health plans in {texas|state}
 AvailablePlans find available {HMO|planType} plans in {texas|state}
+AvailablePlans to find available {HMO|planType} plans in {texas|state}
 AvailablePlans what plans are available {HMO|planType} plans in {texas|state}
 AvailablePlans find available {HMO|planType} health plans in {texas|state}
+AvailablePlans to find available {HMO|planType} health plans in {texas|state}
 AvailablePlans what plans are available {HMO|planType} health plans in {texas|state}
 AvailablePlans find available {EPO|planType} plans in {texas|state}
+AvailablePlans to find available {EPO|planType} plans in {texas|state}
 AvailablePlans what plans are available {EPO|planType} plans in {texas|state}
 AvailablePlans find available {EPO|planType} health plans in {texas|state}
+AvailablePlans to find available {EPO|planType} health plans in {texas|state}
 AvailablePlans what plans are available {EPO|planType} health plans in {texas|state}
