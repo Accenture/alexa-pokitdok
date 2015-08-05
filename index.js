@@ -83,7 +83,7 @@ exports.handler = function (event, context) {
                         context.succeed(helpers.buildResponse(session, speechletResponse));
                      });
         }
-        // 
+        // Intent requests are handled via onIntent method
         else if (event.request.type === 'IntentRequest') {
             onIntent(event.request,
                      event.session,
@@ -91,6 +91,7 @@ exports.handler = function (event, context) {
                          context.succeed(helpers.buildResponse(session, speechletResponse));
                      });
         } 
+        // Logic for ending a session is contained in sessionEnd.js
         else if (event.request.type === 'SessionEndedRequest') {
             logger.info('Received a session end request, routing to onSessionEnded handler');
             route = require('./scripts/sessionEnd.js');
