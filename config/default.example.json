@@ -1,0 +1,132 @@
+// Example configuration for the application. Rename this file 
+// from default.example.json to default.json in order to make active.
+{
+  // Global configuration settings
+  "global": {
+    "region": "English-US",
+    "applicationId": "amzn1.echo-sdk-ams.app.alexa-pokitdok-test"
+  },
+  // Logging configuration settings
+  "logging": {
+    "console": {
+      "enabled": true,
+      "logLevel": "debug",
+      "colorize": true,
+      "json": false,
+      "stringify":  false,
+      "prettyPrint": true,
+      "depth": null,
+      "humanReadableUnhandledException": true,
+      "showLevel": true
+    },
+    "file": {
+      "enabled": false,
+      "filename": "./logs/logfile.txt",
+      "logLevel": "info",
+      "silent": false,
+      "colorize": false,
+      "timestamp": true,
+      "maxsize": 5000,
+      "json": false,
+      "prettyPrint": true,
+      "depth": null,
+      "logstash": false,
+      "tailable": false,
+      "showLevel": false
+    }
+  },
+  // PokitDok module configs
+  "pokitdok": {
+    "api": {
+      "clientId": "",
+      "clientSecret": "",
+      "apiVersion": "v4"
+    }
+  },
+  // node-geocoder module configs
+  "google-geocoder": {
+    "api": {
+      "key": ""
+    }
+  },
+  // Configuration of Alexa spoken responses
+  "responses": {
+    "regions": {
+      "English-US": {
+        "onLaunch": {
+          "cardTitle": "Welcome!",
+          "speechOutput": "Welcome to the Alexa Pokitdok demo, we can meet all your health needs by just listening to your voice.",
+          "errorSpeechOutput": "Welcome to the Alexa Pokitdok demo, we can meet all your health needs by just listening to your voice. Let's start by getting to know you, what is your name?"
+        },
+        "reprompts": {
+          "AdvertiseAvailablePlans": "I'm sorry, I missed that. Would you like to try finding available health plans in your state? Try saying, find a available health plans.",
+          "AdvertiseFindProviders": "I'm sorry, I missed that. Would you like to try finding doctors nearby? Try saying, find a internal medicine doctots nearby."
+        },
+        "promptData": {
+          "nameResponse": {
+            "speechOutput": "Let's start by getting to know you, what is your name?",
+            "repromptText": "I'm sorry, I missed that. What is your name?"
+          },
+          "addressResponse": {
+            "speechOutput": "What is your address?",
+            "repromptText": "I'm sorry, I missed that. What is your address"        
+          }
+        },
+        "Cancel": {
+          "cardTitle": "See you soon!",
+          "speechOutput": "Until we speak again next time",
+          "repromptText": "",
+          "errorResponse": {
+            "speechOutput": "Until we speak again next time",
+            "repromptText": ""
+          }
+        },
+        "HelpMe": {
+          "cardTitle": "Help",
+          "speechOutput": "Ok, you could use a little help. If you would like to search for a doctor, say find a doctor nearby. If you would like to find available health plans, say find available health plans.",
+          "repromptText": "I'm sorry, I missed that. As recap, if you would like to search for a doctor, say find a doctor nearby. If you would like to find available health plans, say find available health plans.",
+          "errorResponse": {
+            "speechOutput": "Ok, you could use a little help. If you would like to search for a doctor, say find a doctor nearby. If you would like to find available health plans, say find available health plans.",
+            "repromptText": "I'm sorry, I missed that. As recap, if you would like to search for a doctor, say find a doctor nearby. If you would like to find available health plans, say find available health plans."
+          }
+        },
+        "MyName": {
+          "cardTitle": "Your Name",
+          "speechOutput": "Nice to meet you %s!",
+          "repromptText": "I'm sorry, I missed that. Could you say your name again?",
+          "errorResponse": {
+            "speechOutput": "Nice to meet you %s!",
+            "repromptText": "I'm sorry, I missed that. Could you say your name again?"
+          }
+        },
+        "MyAddress": {
+          "cardTitle": "Your Address",
+          "speechOutput": "Thank you for sharing your address in %s, %s. Now that we know where you are you can search for doctors or find available health plans. Try saying find internal medicine doctors nearby",
+          "repromptText": "I'm sorry, I had trouble finding that address. Could you say your address again? For example, say I live at 111 Main Street, Houston Texas",
+          "errorResponse": {
+            "speechOutput": "I'm sorry, I had trouble finding that address. Could you say your address again? For example, say I live at 111 Main Street, Houston Texas",
+            "repromptText": "I'm sorry, I had trouble finding that address. Could you say your address again? For example, say I live at 111 Main Street, Houston Texas"
+          }
+        },
+        "AvailablePlans": {
+          "cardTitle": "Available Plans",
+          "speechOutput": "We found the following plans in your state, %s, . Would you like to try finding doctors nearby. Try saying, find internal medicine doctors nearby",
+          "repromptText": "I could not find any plans for your location, you can ask me to find available plans by saying, find PPO plans for Texas",
+          "errorResponse": {
+            "speechOutput": "I could not find any plans for your location, please try again",
+            "repromptText": "I could not find any plans for your location, you can ask me to find available plans by saying, find PPO plans for Texas"
+          }
+        },
+        "FindProvider": {
+          "cardTitle": "Find a Doctor",
+          "speechOutput": "We found the following %s doctors near your location, %s. Would you like to find a different type of doctor? Try saying, find endocrinology doctors.",
+          "repromptText": "I could not find any providers near your location, please try again",
+          "errorResponse": {
+            "speechOutput": "I could not find any providers near your location, please try again",
+            "repromptText": "I could not find any providers near your location, you can ask me to find providers nearby by saying, find providers near me"
+          }
+        }
+      }
+    }
+  }
+}

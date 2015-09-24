@@ -1,0 +1,6 @@
+config/*
+!config/default.example.json
+dist/
+node_modules/
+event.json
+logs/
