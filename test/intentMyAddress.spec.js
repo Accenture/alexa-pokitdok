@@ -103,6 +103,10 @@ describe('Send MyAddress Intent', function() {
 							result.sessionAttributes.should.have.property('city').to.have.length.of.at.least(3);
 						});
 
+						it('should save county in the session', function() {
+							result.sessionAttributes.should.have.property('county').to.have.length.of.at.least(3);
+						});
+
 						it('should save state in the session', function() {
 							result.sessionAttributes.should.have.property('state').to.have.length(2);
 						});

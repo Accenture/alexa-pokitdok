@@ -22,6 +22,7 @@ var helpers = require('./helpers.js');
 //Include Node utility package to support string formatting
 var util = require('util');
 
+/*jshint sub:true*/
 // Safely access geolocation values that may not have been returned from Google
 function getGeoValue(geolocation, fieldName) {
   var rtnVal;
@@ -30,10 +31,17 @@ function getGeoValue(geolocation, fieldName) {
     if(typeof geolocation[0][fieldName] !== 'undefined' && geolocation[0][fieldName]){
       rtnVal = geolocation[0][fieldName];
     }
+
+    if(typeof geolocation[0]['administrativeLevels'] !== 'undefined' && geolocation[0]['administrativeLevels']){
+      if(typeof geolocation[0]['administrativeLevels'][fieldName] !== 'undefined' && geolocation[0]['administrativeLevels'][fieldName]){
+        rtnVal = geolocation[0]['administrativeLevels'][fieldName];
+      }
+    }
   }
 
   return rtnVal;
 }
+/*jshint sub:false*/
 
 // Safely access slot values that may not have been passed in from Alexa
 function getSlotValue(intent, slotName) {
@@ -73,8 +81,9 @@ exports.executeIntent = function (intent, session, callback) {
       var streetNumber = getGeoValue(geoloc, 'streetNumber');
       var streetName = getGeoValue(geoloc, 'streetName');
       var city = getGeoValue(geoloc, 'city');
-      var state = getGeoValue(geoloc, 'state');
-      var stateCode = getGeoValue(geoloc, 'stateCode');
+      var state = getGeoValue(geoloc, 'level1long');
+      var county = getGeoValue(geoloc, 'level2short');
+      var stateCode = getGeoValue(geoloc, 'level1short');
       var zipcode = getGeoValue(geoloc, 'zipcode');
 
       // Save values returned into the Alexa session
@@ -102,6 +111,10 @@ exports.executeIntent = function (intent, session, callback) {
 
       if(typeof zipcode !== 'undefined' && zipcode) {
       	session.attributes = helpers.setSessionValue(session, 'zipcode', zipcode);
+      }
+
+      if(typeof county !== 'undefined' && county) {
+        session.attributes = helpers.setSessionValue(session, 'county', county);
       }
 
     }

@@ -27,7 +27,7 @@
     "config": "^1.14.0",
     "node-geocoder": "^2.21.2",
     "node-usps": "0.0.2",
-    "pokitdok-nodejs": "0.0.7",
+    "pokitdok-nodejs": "0.0.10",
     "winston": "1.0.*"
   },
   "bundledDependencies": [
@@ -40,7 +40,7 @@
   "devDependencies": {
     "chai": "3.*",
     "grunt": "0.4.*",
-    "grunt-aws-lambda": "0.4.*",
+    "grunt-aws-lambda": "0.*.*",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-copy": "0.*",
     "grunt-contrib-jshint": "0.*",

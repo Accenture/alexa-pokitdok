@@ -37,8 +37,7 @@ exports.executeIntent = function (intent, session, callback) {
     }
 
     var state = helpers.getSessionValue(session, 'state');
-    var city = helpers.getSessionValue(session, 'city');
-    var zipcode = helpers.getSessionValue(session, 'zipcode');
+    var county = helpers.getSessionValue(session, 'county');
 
     //Default planType to 'PPO' if not specified
     var planType = planTypeSlot.value || 'PPO';
@@ -54,8 +53,7 @@ exports.executeIntent = function (intent, session, callback) {
     var planParams = {
         plan_type: planType,
         state: state,
-        city: city,
-        zipcode: zipcode
+        county: county
     };
     logger.info('Input Parameters to PokitDok plan search:', planParams);
 
