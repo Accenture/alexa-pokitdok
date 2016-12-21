@@ -78,7 +78,7 @@ module.exports = function (grunt) {
     lambda_deploy: {
       default: {
         //Update deployment location here
-        arn: 'arn:aws:lambda:us-east-1:651084418096:function:alexa-pokitdok',
+        arn: 'arn:aws:lambda:us-east-1:00000000000:function:myFunctionName',
         options: {
 	        timeout : 5,
 	        memory: 128

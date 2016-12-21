@@ -1,6 +1,6 @@
 Amazon Echo PokitDok Demo
 ===================================
-This is an Amazon Echo (Alexa) application which utilizes the PokitDoc [PokitDoc](https://pokitdok.com/) API to return valuable information about your health care environment.  
+This is a demo implementation of an Amazon Alexa application deployed to Amazon's Lambda service which utilizes the [PokitDok](https://pokitdok.com/) API to return valuable information about health care services in your local area via the voice interface of your Amazon Echo.
 
 Amazon provides a great deal of documentation on how to build Echo applications using their SDK. The following two articles were the primary ones referred to, but there are many more. 
 
@@ -19,25 +19,6 @@ Prerequisites
 
 Setup Instructions
 ==================
-
-Setup Your Dev Environment
---------------------------
-In order to use this code on your computer, you will need prepare your development environment. Instructions for how to setup your dev environment are available for...
-
-*  [Mac](https://aowp.accenture.com/wiki/#!architecture/development/workstation-setup-mac.md)
-*  [Windows](https://aowp.accenture.com/wiki/#!architecture/development/workstation-setup-windows.md)
-
-Node
-----------
-You will need to install the dependency packages by executing the following in the root of the repository
-
-		$ npm install
-
-Grunt
-----------
-You will need to install Grunt on your system if you have not already done so for previous projects
-
-		$ npm install grunt -g
 
 Amazon Credentials
 -------------------
@@ -134,5 +115,5 @@ Your Node app hosted on AWS Lambda only provides the backend for your new Alexa 
 A few notes on how to complete the forms...
 
 *  **Endpoint**:  This will be the same ARN path you copied into your Gruntfile.js
-*  **Intent Schema and Utterances**:  Samples are available in the repository skill/ folder
+*  **Intent Schema and Utterances**:  Samples are available in the repository 'skill/' folder
 *  **Testing**:  You will need to ensure your Echo device is associated with the same Amazon account as utilized for your developer account. After you have saved your skill, you should be able to view the skill on your Echo iOS/Android application.

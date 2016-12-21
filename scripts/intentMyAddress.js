@@ -43,6 +43,7 @@ function getGeoValue(geolocation, fieldName) {
 }
 /*jshint sub:false*/
 
+
 // Safely access slot values that may not have been passed in from Alexa
 function getSlotValue(intent, slotName) {
   var rtnVal = '';

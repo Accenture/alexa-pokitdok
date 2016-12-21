@@ -8,9 +8,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://innersource.accenture.com/accenture-digital-health/alexa-pokitdok.git"
+    "url": "git+https://github.com/Accenture/alexa-pokitdok.git"
   },
-  "homepage": "https://innersource.accenture.com/accenture-digital-health/alexa-pokitdok.git",
+  "homepage": "https://github.com/Accenture/alexa-pokitdok",
   "engines": {
     "node": ">=0.10.0"
   },
