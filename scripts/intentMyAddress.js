@@ -48,7 +48,7 @@ function getGeoValue(geolocation, fieldName) {
 function getSlotValue(intent, slotName) {
   var rtnVal = '';
 
-  if(typeof intent.slots[slotName] !== 'undefined' && intent.slots[slotName]){
+  if(typeof intent.slots[slotName] !== 'undefined' && intent.slots[slotName] && typeof intent.slots[slotName].value !== 'undefined' && intent.slots[slotName].value){
     rtnVal = intent.slots[slotName].value;
   }
 

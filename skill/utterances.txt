@@ -9,6 +9,16 @@ Cancel quit
 Cancel leave
 Cancel exit
 Cancel escape
+Cancel i am done
+Cancel i'm done
+Cancel thank you i'm done
+Cancel thank you i am done
+Cancel please quit
+Cancel i'm all done
+Cancel i am all done
+Cancel please exit
+Cancel please stop
+Cancel stop
 MyName my name is {michael|name}
 MyAddress my address is {one twenty three|streetNumber} {main street|streetName} {houston|city} {texas|state}
 MyAddress my address is {one two three four|streetNumber} {main street|streetName} {houston|city} {texas|state}

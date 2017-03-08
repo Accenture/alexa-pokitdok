@@ -50,7 +50,7 @@ describe('Send Cancel Intent', function() {
 					describe('#response-Success', function() {
 					
 						it('shoud return output speech text', function () {
-							result.response.outputSpeech.should.have.property('text').to.have.length.of.at.least(10);
+							result.response.outputSpeech.should.have.property('text').to.have.length.of.at.least(7);
 						});
 
 						it('should have output speech type of \'PlainText\'', function () {

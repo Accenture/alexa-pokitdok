@@ -74,10 +74,10 @@
         },
         "Cancel": {
           "cardTitle": "See you soon!",
-          "speechOutput": "Until we speak again next time",
+          "speechOutput": "Goodbye",
           "repromptText": "",
           "errorResponse": {
-            "speechOutput": "Until we speak again next time",
+            "speechOutput": "Goodbye",
             "repromptText": ""
           }
         },

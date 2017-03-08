@@ -43,23 +43,22 @@ describe('Send MyAddress Intent', function() {
 	      'slots': {
 					'streetNumber': {
 	          'name': 'streetNumber',
-	          'value': '1201'
+	          'value': '111'
 	        },
 					'streetName': {
 	          'name': 'streetName',
-	          'value': 'Fannin St'
+	          'value': 'main street'
 	        },
 	        'city': {
 	          'name': 'city',
-	          'value': 'Houston'
+	          'value': 'houston'
 	        },
 	        'state': {
 	          'name': 'state',
-	          'value': 'Texas'
+	          'value': 'texas'
 	        },
 	        'zipcode': {
-	          'name': 'zipcode',
-	          'value': '77002'
+	          'name': 'zipcode'
 	        }
 	      }
 	    }
