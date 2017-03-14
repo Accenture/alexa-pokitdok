@@ -11,9 +11,6 @@
     "url": "git+https://github.com/Accenture/alexa-pokitdok.git"
   },
   "homepage": "https://github.com/Accenture/alexa-pokitdok",
-  "engines": {
-    "node": ">=0.10.0"
-  },
   "author": "Michael W. Klein",
   "license": "MIT",
   "keywords": [
