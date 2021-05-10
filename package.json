@@ -4,7 +4,9 @@
   "description": "Integration of Alexa with Pokitdok",
   "main": "index.js",
   "scripts": {
-    "test": "grunt test"
+    "jshint": "jshint --config .jshintrc scripts/**.js test/**.js index.js",
+    "test": "npm run jshint && mocha test/*.spec.js ",
+    "clean": "del-cli dist/**"
   },
   "repository": {
     "type": "git",
@@ -21,26 +23,16 @@
     "pokitdok"
   ],
   "dependencies": {
-    "config": "1.25.*",
-    "node-geocoder": "^2.21.2",
-    "node-usps": "0.0.2",
-    "pokitdok-nodejs": "0.0.10",
-    "winston": "1.0.*"
+    "config": "3.*.*",
+    "node-geocoder": "^3.*.*",
+    "node-usps": "0.0.*",
+    "pokitdok-nodejs": "0.0.*",
+    "winston": "2.*.*"
   },
   "devDependencies": {
-    "chai": "3.*",
-    "grunt": "0.4.*",
-    "grunt-aws-lambda": "0.*.*",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-copy": "0.*",
-    "grunt-contrib-jshint": "0.*",
-    "grunt-contrib-watch": "0.6.*",
-    "grunt-mocha-test": "0.12.*",
-    "grunt-pack": "0.1.*",
-    "jshint-stylish": "1.*",
-    "load-grunt-tasks": "3.*",
-    "mocha": "2.*",
-    "npm": "2.*",
-    "time-grunt": "*"
+    "chai": "4.*",
+    "del-cli": "^3.*.*",
+    "jshint": "^2.12.0",
+    "mocha": "8.*"
   }
 }
